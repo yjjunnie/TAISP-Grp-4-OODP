@@ -6,4 +6,4 @@ FarmManger contains a list of plots <plotList> and has a function findPlot(). Wh
 
 Also this is for TIM, my findPlot() relies on plot manager having a getPlot() function. so i can access the plot conditions and compare against the search criteras. 
 
-![plot](C:\Users\Sher\Downloads\Screenshot 2025-03-28 194228.png)
+![screenshot](screenshot/Screenshot 2025-03-28 194228.png)
