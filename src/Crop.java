@@ -1,13 +1,11 @@
 class Crop {
-    public String name;
-    public int seedlingTime;
-    public int matureTime;
-    public List<String> conditionList;
+    private String name;
 
-    public Crop(String name, int seedlingTime, int matureTime) {
+    public Crop(String name) {
         this.name = name;
-        this.seedlingTime = seedlingTime;
-        this.matureTime = matureTime;
-        this.conditionList = new ArrayList<>();
+    }
+
+    public String getName() {
+        return name;
     }
 }

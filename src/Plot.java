@@ -1,30 +1,47 @@
 class Plot {
-    public Crop crop;
-    public Date estSeedlingDate;
-    public Date estMatureDate;
-    public ArrayList<Sensor> sensors;
-    public int punishment;
+    private int id;
+    private String plotType;
+    private Crop crop;
+    private double temperature;
+    private double humidity;
+    private double lightExposure;
+    private double soilMoisture;
 
-    public Plot(Crop crop, Date estSeedlingDate, Date estMatureDate) {
+    public Plot(int id, String plotType, Crop crop, double temperature, double humidity, double lightExposure, double soilMoisture) {
+        this.id = id;
+        this.plotType = plotType;
         this.crop = crop;
-        this.estSeedlingDate = estSeedlingDate;
-        this.estMatureDate = estMatureDate;
-        this.sensors = new ArrayList<>();
-        this.punishment = 0;
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.lightExposure = lightExposure;
+        this.soilMoisture = soilMoisture;
     }
 
-    public void addSensor(Sensor sensor) {
-        sensors.add(sensor);
+    public int getId() {
+        return id;
     }
 
-    public void checkConditions() {
-        System.out.println("Checking conditions for plot with crop: " + crop.name);
-        // Here you could add logic to iterate through sensors and evaluate crop conditions
+    public String getPlotType() {
+        return plotType;
     }
 
-    public void clear() {
-        System.out.println("Clearing plot with crop: " + crop.name);
-        punishment = 0;
-        // Reset or update other plot attributes as needed
+    public Crop getCrop() {
+        return crop;
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public double getHumidity() {
+        return humidity;
+    }
+
+    public double getLightExposure() {
+        return lightExposure;
+    }
+
+    public double getSoilMoisture() {
+        return soilMoisture;
     }
 }

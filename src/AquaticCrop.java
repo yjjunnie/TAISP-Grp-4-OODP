@@ -1,6 +1,12 @@
-class AquaticCrop extends Crop {
-    public AquaticCrop(String name, int seedlingTime, int matureTime) {
-        super(name, seedlingTime, matureTime);
+public class AquaticCrop extends Crop {
+    private int seedlingDays;
+    private int matureDays;
+
+    public AquaticCrop(String name, int seedlingDays, int matureDays) {
+        super(name);
+        this.seedlingDays = seedlingDays;
+        this.matureDays = matureDays;
     }
-    // Additional aquatic-specific behavior can be added here
+
+    // Optionally add getters, setters, and other methods.
 }

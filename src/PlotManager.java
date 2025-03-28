@@ -1,31 +1,11 @@
 class PlotManager {
-    private List<Plot> plots;
+    private Plot plot;
 
-    public PlotManager() {
-        this.plots = new ArrayList<>();
+    public PlotManager(Plot plot) {
+        this.plot = plot;
     }
 
-    public void addPlot(Plot plot) {
-        plots.add(plot);
-    }
-
-    public void checkAll() {
-        for (Plot plot : plots) {
-            plot.checkConditions();
-        }
-    }
-
-    public void checkConditions() {
-        System.out.println("Checking conditions for all plots...");
-        for (Plot plot : plots) {
-            plot.checkConditions();
-        }
-    }
-
-    public void clearPlot() {
-        System.out.println("Clearing plots...");
-        for (Plot plot : plots) {
-            plot.clear();
-        }
+    public Plot getPlot() {
+        return plot;
     }
 }

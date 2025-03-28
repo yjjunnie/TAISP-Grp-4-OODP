@@ -1,6 +1,12 @@
 class LandCrop extends Crop {
-    public LandCrop(String name, int seedlingTime, int matureTime) {
-        super(name, seedlingTime, matureTime);
+    private int seedlingDays;
+    private int matureDays;
+
+    public LandCrop(String name, int seedlingDays, int matureDays) {
+        super(name);
+        this.seedlingDays = seedlingDays;
+        this.matureDays = matureDays;
     }
-    // Additional land-specific behavior can be added here
+
+    // Optionally add getters, setters, and other methods.
 }
