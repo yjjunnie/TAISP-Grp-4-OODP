@@ -28,7 +28,7 @@ abstract class Plot {
 
     public abstract void initializeSensors();
 
-    private HashMap<String, Integer> getCurrentConditions() {
+    public HashMap<String, Integer> getCurrentConditions() {
 
         HashMap<String, Integer> conditions = new HashMap<>();
 
