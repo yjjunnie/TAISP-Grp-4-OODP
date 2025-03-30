@@ -1,47 +1,128 @@
-class Plot {
-    private int id;
-    private String plotType;
-    private Crop crop;
-    private double temperature;
-    private double humidity;
-    private double lightExposure;
-    private double soilMoisture;
+import java.util.*;
 
-    public Plot(int id, String plotType, Crop crop, double temperature, double humidity, double lightExposure, double soilMoisture) {
-        this.id = id;
-        this.plotType = plotType;
+abstract class Plot {
+    // Static variables
+    private static int numOfPlots = 0;
+
+    // Instance variables
+    private int id;
+    private Crop crop;
+    private int estSeedlingWeek;
+    private int estMatureWeek;
+    private int plantedWeek;
+    private ArrayList<Sensor> sensors;
+    private int punishment;
+
+
+    public Plot(Crop crop, int plantedWeek) {
+        this.id = Plot.numOfPlots;
+        Plot.numOfPlots++;
         this.crop = crop;
-        this.temperature = temperature;
-        this.humidity = humidity;
-        this.lightExposure = lightExposure;
-        this.soilMoisture = soilMoisture;
+        this.plantedWeek = plantedWeek;
+        this.estSeedlingWeek = plantedWeek + crop.getSeedlingWeeks();
+        this.estMatureWeek = plantedWeek + crop.getMatureWeeks();
+        this.punishment = 0;
+        this.sensors = new ArrayList<Sensor>();
+        initializeSensors();
+    }
+
+    public abstract void initializeSensors();
+
+    public HashMap<String, Integer> getCurrentConditions() {
+
+        HashMap<String, Integer> conditions = new HashMap<>();
+
+        for (Sensor sensor : sensors) {
+            String conditionType = sensor.getConditionType();
+            int condition = sensor.getCondition();
+            conditions.put(conditionType, condition);
+        }
+
+        return conditions;
+    }
+
+    // Replacing clearAlert() with setConditions()
+    public void setConditions(String conditionType, int condition) {
+        for (Sensor sensor : sensors) {
+            if (sensor.getConditionType() == conditionType) {
+                sensor.setCondition(condition);
+            }
+        }
+        // Might want to raise alert again
+    }
+
+    public boolean raiseAlert() {
+        HashMap<String, Integer> currentConditions = getCurrentConditions();
+        HashMap<String, Integer[]> requiredConditions = crop.getConditions();
+
+        for (String conditionType : requiredConditions.keySet()) {
+            Integer[] range = requiredConditions.get(conditionType);
+
+            if (currentConditions.containsKey(conditionType)) {
+                Integer currentValue = currentConditions.get(conditionType);
+
+                if (currentValue < range[0] || currentValue > range[1]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Depends on whether plots can be reused, may have to change construction functionality 
+    public String harvestCrop(int currentWeek) {
+        if (currentWeek >= getEstMatureWeek()) {
+            return crop.getName();
+        }
+    }
+
+    public String getGrowthStage(int currentWeek) {
+        if (currentWeek < getEstSeedlingWeek()) {
+            return "Seed";
+        } else if (currentWeek < getEstMatureWeek()) {
+            return "Seedling";
+        } else {
+            return "Mature - Ready to harvest";
+        }
+    }
+
+    public static int getNumOfPlots() {
+        return numOfPlots;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getPlotType() {
-        return plotType;
-    }
-
     public Crop getCrop() {
         return crop;
     }
 
-    public double getTemperature() {
-        return temperature;
+    public int getEstSeedlingWeek() {
+        return estSeedlingWeek;
     }
 
-    public double getHumidity() {
-        return humidity;
+    public int getEstMatureWeek() {
+        return estMatureWeek;
     }
 
-    public double getLightExposure() {
-        return lightExposure;
+    public int getPlantedWeek() {
+        return plantedWeek;
     }
 
-    public double getSoilMoisture() {
-        return soilMoisture;
+    public ArrayList<Sensor> getSensors() {
+        return sensors;
+    }
+
+    public int getPunishment() {
+        return punishment;
+    }
+
+    public void setCrop(Crop crop) {
+        this.crop = crop;
+    }
+
+    public void setPunishment(int punishment) {
+        this.punishment = punishment;
     }
 }
