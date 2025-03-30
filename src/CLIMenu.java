@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class CLIMenu {
     private Integer currentDay;
@@ -7,7 +7,7 @@ public class CLIMenu {
 
     public CLIMenu() {
         this.currentDay = 0;
-        this.farmManager = new FarmManager();
+//        this.farmManager = new FarmManager();
         this.io = new Scanner(System.in);
     }
     
@@ -21,7 +21,7 @@ public class CLIMenu {
         				+ "1. View .......... View crop/envrionment data\n"
         				+ "2. Manage ........ Manage farm plots\n"
         				+ "3. Update ........ Modify farm conditions\n"
-        				+ "4. Alerts ......... View critical alerts\n"
+        				+ "4. Alerts ........ View critical alerts\n"
         				+ "5. Fast Forward .. Move foward in days\n"
         				+ "6. Logout ........ Exit Session");
         		
@@ -38,10 +38,14 @@ public class CLIMenu {
         			default -> System.out.println("ERROR! Invalid selection, please try again!");
         		}
         		
+    		}catch(InputMismatchException e) {
+    			System.out.println("ERROR! Invalid selection, please try again!");
     		}catch(NumberFormatException e) {
     			System.out.println("ERROR! Invalid selection, please try again!");
     		}catch(Exception e) {
     			System.out.println("ERROR! Unexpected error has occured, please try again!");
+    		}finally {
+        		io.nextLine(); // Clearing buffer
     		}
     	}
     	
