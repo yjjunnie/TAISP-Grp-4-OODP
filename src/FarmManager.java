@@ -1,105 +1,85 @@
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 public class FarmManager {
+    // List to store Plot objects.
+    private ArrayList<Plot> plotList;
 
-    // List holding all PlotManager instances.
-    private ArrayList<PlotManager> plotList;
-
+    // Constructor initializes the plot list.
     public FarmManager() {
         plotList = new ArrayList<>();
     }
 
-    /**
-     * Finds and returns a list of plots that match the given parameters.
-     *
-     * Supported parameters (all optional):
-     *  - "plotType": String representing the plot type (e.g., "Aquatic", "Land").
-     *  - "cropType": String representing the crop name.
-     *  - "temperature": Double representing the temperature condition.
-     *  - "humidity": Double representing the humidity condition.
-     *  - "lightExposure": Double representing the light exposure condition.
-     *  - "soilMoisture": Double representing the soil moisture condition.
-     *
-     * @param parameters Map containing the search parameters.
-     * @return List of matching Plot objects.
-     */
-    public List<Plot> findPlot(Map<String, Object> parameters) {
-        List<Plot> matchingPlots = new ArrayList<>();
+    //Adds an already-created Plot (plot object) to the FarmManager. This method is used to manually add in already created plots.
 
-        for (PlotManager manager : plotList) {
-            Plot plot = manager.getPlot(); // Assume PlotManager provides its Plot.
-            boolean matches = true;
+    public void addPlot(Plot plot) {
+        plotList.add(plot);
+    }
 
-            // Check Plot Type (e.g., "Aquatic" or "Land")
-            if (parameters.containsKey("plotType")) {
-                String requiredPlotType = parameters.get("plotType").toString();
-                // Assuming Plot has getPlotType() method.
-                if (!plot.getPlotType().equalsIgnoreCase(requiredPlotType)) {
-                    matches = false;
-                }
-            }
 
-            // Check Crop Type
-            if (matches && parameters.containsKey("cropType")) {
-                String requiredCropType = parameters.get("cropType").toString();
-                // Assuming Plot has getCrop() that returns a Crop with a getName() method.
-                if (plot.getCrop() == null ||
-                        !plot.getCrop().getName().equalsIgnoreCase(requiredCropType)) {
-                    matches = false;
-                }
-            }
+    //Creates a new Plot based on the crop type and plantedDay provided.
+    //If the Crop's type (via getCropType()) is "aquatic" (ignoring case),
+    // an AquaticPlot is created; otherwise, a LandPlot is created.
+    public void createPlot(Crop crop, int plantedDay) {
+        Plot newPlot;
+        if (crop.getCropType().equalsIgnoreCase("aquatic")) {
+            newPlot = new AquaticPlot(crop, plantedDay);
+        } else {
+            newPlot = new LandPlot(crop, plantedDay);
+        }
+        addPlot(newPlot);
+        System.out.println("Created plot with ID: " + newPlot.getId());
+    }
 
-            // Check Temperature
-            if (matches && parameters.containsKey("temperature")) {
-                double requiredTemp = Double.parseDouble(parameters.get("temperature").toString());
-                // Assuming Plot has getTemperature() returning the current temperature.
-                if (plot.getTemperature() != requiredTemp) {
-                    matches = false;
-                }
-            }
 
-            // Check Humidity
-            if (matches && parameters.containsKey("humidity")) {
-                double requiredHumidity = Double.parseDouble(parameters.get("humidity").toString());
-                // Assuming Plot has getHumidity() returning the current humidity.
-                if (plot.getHumidity() != requiredHumidity) {
-                    matches = false;
-                }
-            }
-
-            // Check Light Exposure
-            if (matches && parameters.containsKey("lightExposure")) {
-                double requiredLight = Double.parseDouble(parameters.get("lightExposure").toString());
-                // Assuming Plot has getLightExposure() returning the current light exposure.
-                if (plot.getLightExposure() != requiredLight) {
-                    matches = false;
-                }
-            }
-
-            // Check Soil Moisture
-            if (matches && parameters.containsKey("soilMoisture")) {
-                double requiredSoilMoisture = Double.parseDouble(parameters.get("soilMoisture").toString());
-                // Assuming Plot has getSoilMoisture() returning the current soil moisture.
-                if (plot.getSoilMoisture() != requiredSoilMoisture) {
-                    matches = false;
-                }
-            }
-
-            if (matches) {
-                matchingPlots.add(plot);
+    //Deletes a Plot from the farm based on its unique id.
+    //returns true if the Plot was found and removed; false otherwise.
+    public boolean deletePlot(int plotId) {
+        Iterator<Plot> iterator = plotList.iterator();
+        while (iterator.hasNext()) {
+            Plot p = iterator.next();
+            if (p.getId() == plotId) {
+                iterator.remove();
+                System.out.println("Deleted plot with ID: " + plotId);
+                return true;
             }
         }
-        return matchingPlots;
+        System.out.println("Plot with ID " + plotId + " not found.");
+        return false;
     }
 
     /**
-     * Adds a PlotManager to the FarmManager.
+     * Finds and returns the conditions of a particular Plot as a Map.
+     * The returned map includes:
+     * - "cropType": The crop's name (from the Crop object).
+     * - "plotType": Determined based on the Crop's type.
+     * - Sensor readings for keys such as "Moisture", "Humidity", "Light", "Temperature".
      *
-     * @param manager PlotManager to be added.
+     * @param plotId The unique id of the Plot.
+     * @return A Map with the condition keys and values, or null if the Plot isn't found.
      */
-    public void addPlotManager(PlotManager manager) {
-        plotList.add(manager);
+    public Map<String, Object> findPlotConditions(int plotId) {
+        for (Plot p : plotList) {
+            if (p.getId() == plotId) {
+                Map<String, Object> conditions = new HashMap<>();
+                // Get crop type from the Crop object.
+                String cropType = p.getCrop().getName();
+                conditions.put("cropType", cropType);
+                // Determine plotType based on the crop's type.
+                if (p.getCrop().getCropType().equalsIgnoreCase("aquatic")) {
+                    conditions.put("plotType", "Aquatic");
+                } else {
+                    conditions.put("plotType", "Land");
+                }
+                // Add sensor readings.
+                conditions.putAll(p.getCurrentConditions());
+                return conditions;
+            }
+        }
+        return null;
     }
 }
+
