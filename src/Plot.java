@@ -7,20 +7,20 @@ abstract class Plot {
     // Instance variables
     private int id;
     private Crop crop;
-    private int estSeedlingDay;
-    private int estMatureDay;
-    private int plantedDay;
+    private int estSeedlingWeek;
+    private int estMatureWeek;
+    private int plantedWeek;
     private ArrayList<Sensor> sensors;
     private int punishment;
 
 
-    public Plot(Crop crop, int plantedDay) {
+    public Plot(Crop crop, int plantedWeek) {
         this.id = Plot.numOfPlots;
         Plot.numOfPlots++;
         this.crop = crop;
-        this.plantedDay = plantedDay;
-        this.estSeedlingDay = plantedDay + crop.getSeedlingDays();
-        this.estMatureDay = plantedDay + crop.getMatureDays();
+        this.plantedWeek = plantedWeek;
+        this.estSeedlingWeek = plantedWeek + crop.getSeedlingWeeks();
+        this.estMatureWeek = plantedWeek + crop.getMatureWeeks();
         this.punishment = 0;
         this.sensors = new ArrayList<Sensor>();
         initializeSensors();
@@ -70,16 +70,16 @@ abstract class Plot {
     }
 
     // Depends on whether plots can be reused, may have to change construction functionality 
-    public String harvestCrop(int currentDay) {
-        if (currentDay >= getEstMatureDay()) {
+    public String harvestCrop(int currentWeek) {
+        if (currentWeek >= getEstMatureWeek()) {
             return crop.getName();
         }
     }
 
-    public String getGrowthStage(int currentDay) {
-        if (currentDay < getEstSeedlingDay()) {
+    public String getGrowthStage(int currentWeek) {
+        if (currentWeek < getEstSeedlingWeek()) {
             return "Seed";
-        } else if (currentDay < getEstMatureDay()) {
+        } else if (currentWeek < getEstMatureWeek()) {
             return "Seedling";
         } else {
             return "Mature - Ready to harvest";
@@ -98,16 +98,16 @@ abstract class Plot {
         return crop;
     }
 
-    public int getEstSeedlingDay() {
-        return estSeedlingDay;
+    public int getEstSeedlingWeek() {
+        return estSeedlingWeek;
     }
 
-    public int getEstMatureDay() {
-        return estMatureDay;
+    public int getEstMatureWeek() {
+        return estMatureWeek;
     }
 
-    public int getPlantedDay() {
-        return plantedDay;
+    public int getPlantedWeek() {
+        return plantedWeek;
     }
 
     public ArrayList<Sensor> getSensors() {
