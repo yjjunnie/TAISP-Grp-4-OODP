@@ -1,12 +1,12 @@
 import java.util.*;
 
 public class CLIMenu {
-    private Integer currentDay;
+    private Integer currentWeek;
     private FarmManager farmManager;  // CLIMenu manages FarmManager
     private Scanner io;
 
     public CLIMenu() {
-        this.currentDay = 0;
+        this.currentWeek = 0;
 //        this.farmManager = new FarmManager();
         this.io = new Scanner(System.in);
     }
@@ -17,12 +17,12 @@ public class CLIMenu {
     	
     	while(!isComplete) {
     		try {
-        		System.out.println("Farm Management CLI Commands:\n"
+        		System.out.println("Farm Management CLI Commands (Week "+ currentWeek +"):\n"
         				+ "1. View .......... View crop/envrionment data\n"
         				+ "2. Manage ........ Manage farm plots\n"
         				+ "3. Update ........ Modify farm conditions\n"
         				+ "4. Alerts ........ View critical alerts\n"
-        				+ "5. Fast Forward .. Move foward in days\n"
+        				+ "5. Fast Forward .. Move foward in weeks\n"
         				+ "6. Logout ........ Exit Session");
         		
         		System.out.print("Your Selection: ");
@@ -40,12 +40,13 @@ public class CLIMenu {
         		
     		}catch(InputMismatchException e) {
     			System.out.println("ERROR! Invalid selection, please try again!");
+        		io.nextLine(); // Clearing buffer only when error 
     		}catch(NumberFormatException e) {
     			System.out.println("ERROR! Invalid selection, please try again!");
+        		io.nextLine(); // Clearing buffer only when error 
     		}catch(Exception e) {
     			System.out.println("ERROR! Unexpected error has occured, please try again!");
-    		}finally {
-        		io.nextLine(); // Clearing buffer
+        		io.nextLine(); // Clearing buffer only when error 
     		}
     	}
     	
@@ -77,11 +78,16 @@ public class CLIMenu {
         			default -> System.out.println("ERROR! Invalid selection, please try again!");
         		}
         		
-    		}catch(NumberFormatException e) {
-    			System.out.println("ERROR! Invalid selection, please try again!");
-    		}catch(Exception e) {
-    			System.out.println("ERROR! Unexpected error has occured, please try again!");
-    		}
+    		}catch(InputMismatchException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}catch(NumberFormatException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}catch(Exception e) {
+				System.out.println("ERROR! Unexpected error has occured, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}
     	}
     }
     
@@ -90,24 +96,68 @@ public class CLIMenu {
     }
     
     public void handleAlerts() {
-    	System.out.println("handleAlerts called");
+//    	farmManger.displayAlerts();
+//    	Possible further enhancements
     }
     
     public void handleFastFoward() {
-    	System.out.println("handleFastFoward called");
+    	Boolean isComplete = false;
+    	Boolean confirmed = false;
+    	int userInput;
+    	
+    	loop:while(!isComplete) {
+    		try {
+//    			if(farmManager.hasAlerts()) {
+//    				while(!confirmed) {
+//        				System.out.println("There are still pending alerts, fast forwarding will extend crop\n"
+//                				+ "1. Ignore and continue with fast foward.\n"
+//                				+ "2. Cancel fast fowarding.");
+//
+//                		System.out.print("Your Selection: ");
+//        				userInput = io.nextInt();
+//        				
+//        				switch(userInput) { // Using : case for breaking out of LABELLED loop.
+//    	        			case 1: 
+//    	        				confirmed = true;
+//    	        				break;
+//    	        			case 2: break loop;
+//    	        			default: System.out.println("ERROR! Invalid selection, please try again!");
+//        				}
+//    				}
+//    			}
+    			
+        		System.out.println("Enter the amount of weeks you wish to fast forward by.");
+        		
+        		System.out.print("Fast Foward (weeks): ");
+        		userInput = io.nextInt();
+        		
+        		fastForward(userInput);
+        		isComplete = true;
+        		
+    		}catch(InputMismatchException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}catch(NumberFormatException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}catch(Exception e) {
+				System.out.println("ERROR! Unexpected error has occured, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}
+    	}
     }
 
     public void setFarmManager(FarmManager farmManager) {
         this.farmManager = farmManager;
     }
 
-    public void fastForward(int days) {
-        currentDay += days;
-        System.out.println("Fast forwarded " + days + " days. Current day is now: " + currentDay);
+    public void fastForward(int weeks) {
+        currentWeek += weeks;
+        System.out.println("------------- Current Week: " + currentWeek + " -------------");
     }
 
-    // Optional: getter for currentDay
-    public int getCurrentDay() {
-        return currentDay;
+    // Optional: getter for currentWeek
+    public int getcurrentWeek() {
+        return currentWeek;
     }
 }
