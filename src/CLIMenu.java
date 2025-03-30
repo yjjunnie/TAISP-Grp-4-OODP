@@ -54,7 +54,8 @@ public class CLIMenu {
     }
     
     public void handleView() {
-    	System.out.println("handleView called");
+    	// farmManager.listPlots(currentWeek);
+    	// Possible further enhancements
     }
     
     public void handleManage() {
@@ -72,8 +73,8 @@ public class CLIMenu {
         		selection = io.nextInt();
         		
         		switch(selection) {
-//        			case 1 -> farmManager.createPlot(); 
-//        			case 2 -> farmManager.harvestPlot();
+        			//	case 1 -> farmManager.createPlot(currentWeek); 
+        			//  case 2 -> farmManager.harvestPlot(currentWeek);
         			case 3 -> isComplete = true;
         			default -> System.out.println("ERROR! Invalid selection, please try again!");
         		}
@@ -92,7 +93,8 @@ public class CLIMenu {
     }
     
     public void handleUpdate() {
-    	System.out.println("handleUpdate called");
+//    	farmManger.managePlot();
+//    	Possible further enhancements
     }
     
     public void handleAlerts() {
@@ -147,16 +149,12 @@ public class CLIMenu {
     	}
     }
 
-    public void setFarmManager(FarmManager farmManager) {
-        this.farmManager = farmManager;
-    }
-
     public void fastForward(int weeks) {
         currentWeek += weeks;
+//        <TBC>.ffRandomize(currentWeek);
         System.out.println("------------- Current Week: " + currentWeek + " -------------");
     }
 
-    // Optional: getter for currentWeek
     public int getcurrentWeek() {
         return currentWeek;
     }
