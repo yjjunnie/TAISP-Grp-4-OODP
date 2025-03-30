@@ -7,6 +7,7 @@ public class CLIMenu {
 
     public CLIMenu() {
         this.currentDay = 0;
+        this.farmManager = new FarmManager();
         this.io = new Scanner(System.in);
     }
     
@@ -16,7 +17,7 @@ public class CLIMenu {
     	
     	while(!isComplete) {
     		try {
-        		System.out.println("Farm Management CLI Commands \n"
+        		System.out.println("Farm Management CLI Commands:\n"
         				+ "1. View .......... View crop/envrionment data\n"
         				+ "2. Manage ........ Manage farm plots\n"
         				+ "3. Update ........ Modify farm conditions\n"
@@ -52,7 +53,32 @@ public class CLIMenu {
     }
     
     public void handleManage() {
-    	System.out.println("handleManage called");
+    	Boolean isComplete = false;
+    	int selection;
+    	
+    	while(!isComplete) {
+    		try {
+        		System.out.println("Manage Plots:\n"
+        				+ "1. Create new plot\n"
+        				+ "2. Harvest plot\n"
+        				+ "3. Back to main menu\n");
+        		
+        		System.out.print("Your Selection: ");
+        		selection = io.nextInt();
+        		
+        		switch(selection) {
+//        			case 1 -> farmManager.createPlot(); 
+//        			case 2 -> farmManager.harvestPlot();
+        			case 3 -> isComplete = true;
+        			default -> System.out.println("ERROR! Invalid selection, please try again!");
+        		}
+        		
+    		}catch(NumberFormatException e) {
+    			System.out.println("ERROR! Invalid selection, please try again!");
+    		}catch(Exception e) {
+    			System.out.println("ERROR! Unexpected error has occured, please try again!");
+    		}
+    	}
     }
     
     public void handleUpdate() {
