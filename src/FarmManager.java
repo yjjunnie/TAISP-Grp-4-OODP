@@ -16,23 +16,31 @@ public class FarmManager {
     //Adds an already-created Plot (plot object) to the FarmManager. This method is used to manually add in already created plots.
 
     public void addPlot(Plot plot) {
-        plotList.add(plot);
     }
 
 
     //Creates a new Plot based on the crop type and plantedDay provided.
     //If the Crop's type (via getCropType()) is "aquatic" (ignoring case),
     // an AquaticPlot is created; otherwise, a LandPlot is created.
-    public void createPlot(Crop crop, int plantedDay) {
-        Plot newPlot;
-        if (crop.getCropType().equalsIgnoreCase("aquatic")) {
-            newPlot = new AquaticPlot(crop, plantedDay);
-        } else {
-            newPlot = new LandPlot(crop, plantedDay);
+    public void createPlot(Crop crop, int plantedWeek) {
+        if(crop instanceof LandCrop) {
+        	plotList.add(new LandPlot(crop, plantedWeek));
+        }else if(crop instanceof AquaticCrop) {
+        	plotList.add(new LandPlot(crop, plantedWeek));
+        }else {
+        	System.out.println("ERROR! Unknown crop or plot type, please try again!")
         }
-        addPlot(newPlot);
-        System.out.println("Created plot with ID: " + newPlot.getId());
     }
+    
+//    public void createPlot(LandCrop crop, int plantedWeek) {
+//    	LandPlot plot = new LandPlot(crop, plantedWeek);
+//        plotList.add(plot);
+//    }
+//    
+//    public void createPlot(AquaticCrop crop, int plantedWeek) {
+//    	AquaticPlot plot = new AquaticPlot(crop, plantedWeek);
+//        plotList.add(plot);
+//    }
 
 
     //Deletes a Plot from the farm based on its unique id.
@@ -61,25 +69,25 @@ public class FarmManager {
      * @param plotId The unique id of the Plot.
      * @return A Map with the condition keys and values, or null if the Plot isn't found.
      */
-    public Map<String, Object> findPlotConditions(int plotId) {
-        for (Plot p : plotList) {
-            if (p.getId() == plotId) {
-                Map<String, Object> conditions = new HashMap<>();
-                // Get crop type from the Crop object.
-                String cropType = p.getCrop().getName();
-                conditions.put("cropType", cropType);
-                // Determine plotType based on the crop's type.
-                if (p.getCrop().getCropType().equalsIgnoreCase("aquatic")) {
-                    conditions.put("plotType", "Aquatic");
-                } else {
-                    conditions.put("plotType", "Land");
-                }
-                // Add sensor readings.
-                conditions.putAll(p.getCurrentConditions());
-                return conditions;
-            }
-        }
-        return null;
-    }
+//    public Map<String, Object> findPlotConditions(int plotId) {
+//        for (Plot p : plotList) {
+//            if (p.getId() == plotId) {
+//                Map<String, Object> conditions = new HashMap<>();
+//                // Get crop type from the Crop object.
+//                String cropType = p.getCrop().getName();
+//                conditions.put("cropType", cropType);
+//                // Determine plotType based on the crop's type.
+//                if (p.getCrop().getCropType().equalsIgnoreCase("aquatic")) {
+//                    conditions.put("plotType", "Aquatic");
+//                } else {
+//                    conditions.put("plotType", "Land");
+//                }
+//                // Add sensor readings.
+//                conditions.putAll(p.getCurrentConditions());
+//                return conditions;
+//            }
+//        }
+//        return null;
+//    }
 }
 

@@ -2,12 +2,12 @@ import java.util.*;
 
 public class CLIMenu {
     private Integer currentWeek;
-    private FarmManager farmManager;  // CLIMenu manages FarmManager
+    private FarmManagerUI farmManagerUI; // CLIMenu passes UI handling to FarmManagerUI.
     private Scanner io;
 
     public CLIMenu() {
         this.currentWeek = 0;
-//        this.farmManager = new FarmManager();
+        this.farmManagerUI = new FarmManagerUI();
         this.io = new Scanner(System.in);
     }
     
@@ -25,14 +25,14 @@ public class CLIMenu {
         				+ "5. Fast Forward .. Move foward in weeks\n"
         				+ "6. Logout ........ Exit Session");
         		
-        		System.out.print("Your Selection: ");
+        		System.out.print("> ");
         		selection = io.nextInt();
         		
         		switch(selection) {
-        			case 1 -> handleView();
+        			case 1 -> farmManagerUI.listPlots(currentWeek);
         			case 2 -> handleManage();
-        			case 3 -> handleUpdate();
-        			case 4 -> handleAlerts();
+        			case 3 -> farmManagerUI.managePlot();
+        			case 4 -> farmManagerUI.displayAlerts();
         			case 5 -> handleFastFoward();
         			case 6 -> isComplete = true;
         			default -> System.out.println("ERROR! Invalid selection, please try again!");
@@ -53,11 +53,6 @@ public class CLIMenu {
     	System.out.println("Terminating Session. Thank you for using COF System!");
     }
     
-    public void handleView() {
-    	// farmManager.listPlots(currentWeek);
-    	// Possible further enhancements
-    }
-    
     public void handleManage() {
     	Boolean isComplete = false;
     	int selection;
@@ -67,14 +62,14 @@ public class CLIMenu {
         		System.out.println("Manage Plots:\n"
         				+ "1. Create new plot\n"
         				+ "2. Harvest plot\n"
-        				+ "3. Back to main menu\n");
+        				+ "3. Back to main menu");
         		
-        		System.out.print("Your Selection: ");
+        		System.out.print("> ");
         		selection = io.nextInt();
         		
         		switch(selection) {
-        			//	case 1 -> farmManager.createPlot(currentWeek); 
-        			//  case 2 -> farmManager.harvestPlot(currentWeek);
+        			case 1 -> farmManagerUI.createPlot(currentWeek); 
+        			case 2 -> farmManagerUI.harvestPlot(currentWeek);
         			case 3 -> isComplete = true;
         			default -> System.out.println("ERROR! Invalid selection, please try again!");
         		}
@@ -92,16 +87,6 @@ public class CLIMenu {
     	}
     }
     
-    public void handleUpdate() {
-//    	farmManger.managePlot();
-//    	Possible further enhancements
-    }
-    
-    public void handleAlerts() {
-//    	farmManger.displayAlerts();
-//    	Possible further enhancements
-    }
-    
     public void handleFastFoward() {
     	Boolean isComplete = false;
     	Boolean confirmed = false;
@@ -115,7 +100,7 @@ public class CLIMenu {
 //                				+ "1. Ignore and continue with fast foward.\n"
 //                				+ "2. Cancel fast fowarding.");
 //
-//                		System.out.print("Your Selection: ");
+//                		System.out.print("> ");
 //        				userInput = io.nextInt();
 //        				
 //        				switch(userInput) { // Using : case for breaking out of LABELLED loop.
@@ -130,7 +115,7 @@ public class CLIMenu {
     			
         		System.out.println("Enter the amount of weeks you wish to fast forward by.");
         		
-        		System.out.print("Fast Foward (weeks): ");
+        		System.out.print(">: ");
         		userInput = io.nextInt();
         		
         		fastForward(userInput);
