@@ -9,10 +9,10 @@ class LandPlot extends Plot {
 
     @Override
     public void initializeSensors() {
-        sensors = getSensors();
-        sensors.add(new LightSensor());
-        sensors.add(new TemperatureSensor());
-        sensors.add(new HumiditySensor());
-        sensors.add(new MoistureSensor());
+//        sensors = getSensors();
+//        sensors.add(new LightSensor());
+//        sensors.add(new TemperatureSensor());
+//        sensors.add(new HumiditySensor());
+//        sensors.add(new MoistureSensor());
     }
 }

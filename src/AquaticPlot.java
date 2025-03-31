@@ -9,9 +9,9 @@ class AquaticPlot extends Plot {
 
     @Override
     public void initializeSensors() {
-        sensors = getSensors();
-        sensors.add(new LightSensor());
-        sensors.add(new TemperatureSensor());
-        sensors.add(new HumiditySensor());
+//        sensors = getSensors();
+//        sensors.add(new LightSensor());
+//        sensors.add(new TemperatureSensor());
+//        sensors.add(new HumiditySensor());
     }
 }

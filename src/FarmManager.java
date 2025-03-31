@@ -13,22 +13,31 @@ public class FarmManager {
         plotList = new ArrayList<>();
     }
 
-    //Adds an already-created Plot (plot object) to the FarmManager. This method is used to manually add in already created plots.
-
-    public void addPlot(Plot plot) {
-    }
-
-
-    //Creates a new Plot based on the crop type and plantedDay provided.
-    //If the Crop's type (via getCropType()) is "aquatic" (ignoring case),
-    // an AquaticPlot is created; otherwise, a LandPlot is created.
+	public void displayAllPlots(int week) {
+		if(plotList.size() == 0) 
+			System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");
+		else {
+			System.out.println("There are currently "+ plotList.size() +" plots.");
+			for(Plot plot : plotList) {
+				System.out.println("PlotID\tCrop\tGrowth Stage\tHarvest Status\n");
+				System.out.print(plot.getId()+"\t"+plot.getCrop().name);
+				if(plot.getEstSeedlingWeek() > week) 
+					System.out.print("\tSeedling\tNot Ready");
+				else
+					System.out.print("\tMature\tReady");
+				
+			}
+			// Potentially add alert status
+		}
+	}
+	
     public void createPlot(Crop crop, int plantedWeek) {
         if(crop instanceof LandCrop) {
         	plotList.add(new LandPlot(crop, plantedWeek));
         }else if(crop instanceof AquaticCrop) {
         	plotList.add(new LandPlot(crop, plantedWeek));
         }else {
-        	System.out.println("ERROR! Unknown crop or plot type, please try again!")
+        	System.out.println("ERROR! Unknown crop or plot type, please try again!");
         }
     }
     
