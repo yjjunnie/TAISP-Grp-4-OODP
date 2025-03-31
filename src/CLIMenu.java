@@ -29,10 +29,10 @@ public class CLIMenu {
         		selection = io.nextInt();
         		
         		switch(selection) {
-        			case 1 -> farmManagerUI.listPlots(currentWeek);
-        			case 2 -> handleManage();
-        			case 3 -> farmManagerUI.managePlot();
-        			case 4 -> farmManagerUI.displayAlerts();
+        			case 1 -> farmManagerUI.viewMenu(currentWeek);
+        			case 2 -> farmManagerUI.manageMenu(currentWeek);
+        			case 3 -> farmManagerUI.updateMenu();
+        			case 4 -> farmManagerUI.alertMenu();
         			case 5 -> handleFastFoward();
         			case 6 -> isComplete = true;
         			default -> System.out.println("ERROR! Invalid selection, please try again!");
@@ -54,37 +54,7 @@ public class CLIMenu {
     }
     
     public void handleManage() {
-    	Boolean isComplete = false;
-    	int selection;
     	
-    	while(!isComplete) {
-    		try {
-        		System.out.println("Manage Plots:\n"
-        				+ "1. Create new plot\n"
-        				+ "2. Harvest plot\n"
-        				+ "3. Back to main menu");
-        		
-        		System.out.print("> ");
-        		selection = io.nextInt();
-        		
-        		switch(selection) {
-        			case 1 -> farmManagerUI.createPlot(currentWeek); 
-        			case 2 -> farmManagerUI.harvestPlot(currentWeek);
-        			case 3 -> isComplete = true;
-        			default -> System.out.println("ERROR! Invalid selection, please try again!");
-        		}
-        		
-    		}catch(InputMismatchException e) {
-				System.out.println("ERROR! Invalid selection, please try again!");
-	    		io.nextLine(); // Clearing buffer only when error 
-			}catch(NumberFormatException e) {
-				System.out.println("ERROR! Invalid selection, please try again!");
-	    		io.nextLine(); // Clearing buffer only when error 
-			}catch(Exception e) {
-				System.out.println("ERROR! Unexpected error has occured, please try again!");
-	    		io.nextLine(); // Clearing buffer only when error 
-			}
-    	}
     }
     
     public void handleFastFoward() {

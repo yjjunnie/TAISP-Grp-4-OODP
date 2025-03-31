@@ -106,6 +106,7 @@ public class FarmManagerUI {
     }
     
     public void harvestPlotMenu(int week) {
+    	
     }
     
     public void updateMenu() {
@@ -120,8 +121,38 @@ public class FarmManagerUI {
     	
     }
     
-    public void listPlots(int week) {
-    	farmManager.displayAllPlots(week);
+    public void viewMenu(int week) {
+    	Boolean isComplete = false;
+		int selection;
+		
+		while(!isComplete) {
+			try {
+	    		System.out.println("Select plot statuses to view:\n"
+	    				+ "1. Crop Statuses\n"
+	    				+ "2. Condition Statuses\n"
+	    				+ "3. Back to main menu");
+	    		
+	    		System.out.print("> ");
+	    		selection = io.nextInt();
+	    		
+	    		switch(selection) {
+	    			case 1 -> farmManager.displayAllPlotsCrops(week);
+//	    			case 2 -> farmManager.displayAllPlotsConditions(week);
+	    			case 3 -> isComplete = true;
+	    			default -> System.out.println("ERROR! Invalid selection, please try again!");
+	    		}
+	    		
+			}catch(InputMismatchException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}catch(NumberFormatException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}catch(Exception e) {
+				System.out.println("ERROR! Unexpected error has occured, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}
+		}
     }
     
     public void managePlot() {

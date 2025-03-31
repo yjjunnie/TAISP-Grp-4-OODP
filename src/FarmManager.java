@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.List;
 
 public class FarmManager {
@@ -13,7 +14,7 @@ public class FarmManager {
         plotList = new ArrayList<>();
     }
 
-	public void displayAllPlots(int week) {
+	public void displayAllPlotsCrops(int week) {
 		if(plotList.size() == 0) 
 			System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");
 		else {
@@ -21,14 +22,38 @@ public class FarmManager {
 			for(Plot plot : plotList) {
 				System.out.println("PlotID\tCrop\tGrowth Stage\tHarvest Status\n");
 				System.out.print(plot.getId()+"\t"+plot.getCrop().name);
-				if(plot.getEstSeedlingWeek() > week) 
-					System.out.print("\tSeedling\tNot Ready");
+				
+				if(plot.getEstMatureWeek() > week) 
+					System.out.print("\t"+plot.getGrowthStage(week)+"\tNot Ready");
 				else
 					System.out.print("\tMature\tReady");
 				
 			}
-			// Potentially add alert status
 		}
+	}
+	
+	public void displayAllPlotsConditions(int week) {
+		// displayAllPlotsCrops but for plot conditions, and if any alerts.
+	}
+	
+	public ArrayList<Integer> displayAllHarvestable(int week) {
+		ArrayList<Integer> plotIds = new ArrayList<Integer>();
+		List<Plot> filteredPlotsList = plotList.stream().filter(plot -> plot.getGrowthStage(week) == "Mature - Ready to harvest").collect(Collectors.toList());
+		
+		if(plotList.size() == 0 ) {
+			System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");
+		}else if(filteredPlotsList.size() == 0){
+			System.out.println("Sorry, there are currently no plots that are ready to harvest.");
+		}else {
+			
+			System.out.println("There are currently "+ filteredPlotsList.size() +" plots ready to harvest, please select one.");
+			for(Plot plot : filteredPlotsList) {
+				plotIds.add(plot.getId());
+				System.out.println(plot.getId()+"\t"+plot.getCrop().name+"\t"+plot.getGrowthStage(week));
+			}
+			return plotIds;
+		}
+		return null;
 	}
 	
     public void createPlot(Crop crop, int plantedWeek) {
