@@ -110,39 +110,40 @@ public class FarmManagerUI {
     	int selection;
 
 		while(!isComplete) {
-			
-    		ArrayList<Integer> plotIds = displayAllHarvestable();
-			if(plotIds.size() == 0) return;
+			try{
+				ArrayList<Integer> plotIds = displayAllHarvestable();
+				if(plotIds.size() == 0) return;
 
-			System.out.println("Enter the id of the plot you wish to harvest, or -1 to cancel.");
-        		
-        	System.out.print("> ");
-        	selection = io.nextInt();
+				System.out.println("Enter the id of the plot you wish to harvest, or -1 to cancel.");
+					
+				System.out.print("> ");
+				selection = io.nextInt();
 
-			if(selection == -1) return;
-			else if(plotIds.contains(selection)) {
-				boolean deleted = farmManager.harvestPlot(selection);
-				
-				if(!deleted){
-					System.out.println("ERROR! Unexpected error has occured, Plot with id "+selection+" was not found, please try again!");
-    				continue;
+				if(selection == -1) return;
+				else if(plotIds.contains(selection)) {
+					boolean deleted = farmManager.harvestPlot(selection);
+					
+					if(!deleted){
+						System.out.println("ERROR! Unexpected error has occured, Plot with id "+selection+" was not found, please try again!");
+						continue;
+					}
+
+					return;
+				} else {
+					System.out.println("ERROR! Invalid selection, please try again!");
+					continue;
 				}
-
-				return;
-			} else {
+					
+			}catch(InputMismatchException e) {
 				System.out.println("ERROR! Invalid selection, please try again!");
-    			continue;
+				io.nextLine(); // Clearing buffer only when error 
+			}catch(NumberFormatException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
+			}catch(Exception e) {
+				System.out.println("ERROR! Unexpected error has occured, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
 			}
-        		
-		}catch(InputMismatchException e) {
-			System.out.println("ERROR! Invalid selection, please try again!");
-			io.nextLine(); // Clearing buffer only when error 
-		}catch(NumberFormatException e) {
-			System.out.println("ERROR! Invalid selection, please try again!");
-			io.nextLine(); // Clearing buffer only when error 
-		}catch(Exception e) {
-			System.out.println("ERROR! Unexpected error has occured, please try again!");
-			io.nextLine(); // Clearing buffer only when error 
 		}
     }
     
@@ -187,13 +188,7 @@ public class FarmManagerUI {
 			}
 		}
     }
-    
-    public void managePlot() {
-    	
-    }
 
-    public void displayAlerts() {
-    	
     }
     
     public void initCrops() {

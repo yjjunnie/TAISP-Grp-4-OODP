@@ -14,6 +14,10 @@ public class FarmManager {
         plotList = new ArrayList<>();
     }
 
+    public List<Integer> getPlotIds() {
+        return plotList.stream().map(plot -> plot.getId()).collect(Collectors.toList());
+    }
+
 	public void displayAllPlotsCrops(int week) {
 		if(plotList.size() == 0) 
 			System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");
@@ -85,13 +89,6 @@ public class FarmManager {
         }
 
         return false;
-    }
-
-
-    //Deletes a Plot from the farm based on its unique id.
-    //returns true if the Plot was found and removed; false otherwise.
-    public boolean deletePlot(int plotId) {
-        
     }
 
     /**
