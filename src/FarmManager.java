@@ -66,10 +66,10 @@ public class FarmManager {
             if (p.getId() == plotId) {
                 Map<String, Object> conditions = new HashMap<>();
                 // Get crop type from the Crop object.
-                String cropType = p.getCrop().getName();
+                String cropType = p.getCrop().CropType();
                 conditions.put("cropType", cropType);
                 // Determine plotType based on the crop's type.
-                if (p.getCrop().getCropType().equalsIgnoreCase("aquatic")) {
+                if (cropType.equalsIgnoreCase("aquatic")) {
                     conditions.put("plotType", "Aquatic");
                 } else {
                     conditions.put("plotType", "Land");
