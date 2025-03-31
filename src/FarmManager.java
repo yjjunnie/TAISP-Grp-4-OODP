@@ -57,40 +57,41 @@ public class FarmManager {
 	}
 	
     public void createPlot(Crop crop, int plantedWeek) {
-        if(crop instanceof LandCrop) {
-        	plotList.add(new LandPlot(crop, plantedWeek));
-        }else if(crop instanceof AquaticCrop) {
-        	plotList.add(new LandPlot(crop, plantedWeek));
-        }else {
-        	System.out.println("ERROR! Unknown crop or plot type, please try again!");
-        }
+        System.out.println("ERROR! Unknown crop or plot type, please try again!");
+        // Uses method overloading for plot creation.
+        // Generic method is to prevent compilation error.
     }
     
-//    public void createPlot(LandCrop crop, int plantedWeek) {
-//    	LandPlot plot = new LandPlot(crop, plantedWeek);
-//        plotList.add(plot);
-//    }
-//    
-//    public void createPlot(AquaticCrop crop, int plantedWeek) {
-//    	AquaticPlot plot = new AquaticPlot(crop, plantedWeek);
-//        plotList.add(plot);
-//    }
+   public void createPlot(LandCrop crop, int plantedWeek) {
+   	    LandPlot plot = new LandPlot(crop, plantedWeek);
+        plotList.add(plot);
+   }
+   
+   public void createPlot(AquaticCrop crop, int plantedWeek) {
+    	AquaticPlot plot = new AquaticPlot(crop, plantedWeek);
+        plotList.add(plot);
+   }
+
+    public boolean harvestPlot(int plotId){
+        Iterator<Plot> iterator = plotList.iterator();
+
+        while (iterator.hasNext()) {
+            Plot p = iterator.next();
+
+            if (p.getId() == plotId) {
+                iterator.remove();
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 
     //Deletes a Plot from the farm based on its unique id.
     //returns true if the Plot was found and removed; false otherwise.
     public boolean deletePlot(int plotId) {
-        Iterator<Plot> iterator = plotList.iterator();
-        while (iterator.hasNext()) {
-            Plot p = iterator.next();
-            if (p.getId() == plotId) {
-                iterator.remove();
-                System.out.println("Deleted plot with ID: " + plotId);
-                return true;
-            }
-        }
-        System.out.println("Plot with ID " + plotId + " not found.");
-        return false;
+        
     }
 
     /**
