@@ -31,7 +31,7 @@ public class CLIMenu {
         		switch(selection) {
         			case 1 -> farmManagerUI.viewMenu(currentWeek);
         			case 2 -> farmManagerUI.manageMenu(currentWeek);
-        			case 3 -> farmManagerUI.updateMenu();
+        			case 3 -> farmManagerUI.updateMenu(currentWeek);
         			case 4 -> farmManagerUI.alertMenu();
         			case 5 -> handleFastFoward();
         			case 6 -> isComplete = true;

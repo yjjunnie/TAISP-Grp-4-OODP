@@ -1,9 +1,5 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.List;
 
 public class FarmManager {
     // List to store Plot objects.

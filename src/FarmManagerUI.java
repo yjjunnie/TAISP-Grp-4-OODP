@@ -111,7 +111,7 @@ public class FarmManagerUI {
 
 		while(!isComplete) {
 			try{
-				ArrayList<Integer> plotIds = displayAllHarvestable();
+				ArrayList<Integer> plotIds = farmManager.displayAllHarvestable(week);
 				if(plotIds.size() == 0) return;
 
 				System.out.println("Enter the id of the plot you wish to harvest, or -1 to cancel.");
@@ -147,8 +147,43 @@ public class FarmManagerUI {
 		}
     }
     
-    public void updateMenu() {
-    	
+    public void updateMenu(int week) {
+    	boolean isComplete = false;
+    	int selection;
+
+		while(!isComplete) {
+			try{
+				farmManager.displayAllPlotsConditions(week);
+				List<Integer> plotIds = farmManager.getPlotIds();
+				
+				if(plotIds.size() == 0) return;
+				System.out.println("Enter the id of the plot you wish to adjust, or -1 to cancel.");
+				
+				System.out.print("> ");
+				selection = io.nextInt();
+
+				if(selection == -1) return;
+				else if(plotIds.contains(selection)) {
+					// ADJUSTMENT CODE
+
+					return;
+				} else {
+					System.out.println("ERROR! Invalid selection, please try again!");
+					continue;
+				}
+
+			}catch(InputMismatchException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
+			}catch(NumberFormatException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
+			}catch(Exception e) {
+				System.out.println("ERROR! Unexpected error has occured, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
+			}
+		}
+		
     }
     
     public void alertMenu() {
@@ -171,7 +206,7 @@ public class FarmManagerUI {
 	    		
 	    		switch(selection) {
 	    			case 1 -> farmManager.displayAllPlotsCrops(week);
-//	    			case 2 -> farmManager.displayAllPlotsConditions(week);
+	    			case 2 -> farmManager.displayAllPlotsConditions(week);
 	    			case 3 -> isComplete = true;
 	    			default -> System.out.println("ERROR! Invalid selection, please try again!");
 	    		}
@@ -189,7 +224,6 @@ public class FarmManagerUI {
 		}
     }
 
-    }
     
     public void initCrops() {
     	// Enhancement with CVS reading
