@@ -24,7 +24,7 @@ class HumiditySensor extends Sensor {
         if (climenu.getCurrentDay() - created_day == 0) //checking conditions on day of creation 
             return condition;
         else {
-            realHumidity.setCondition("Humidity");
+            realHumidity.setCondition("Humidity"); //!!!if check on day 10, will randomise twice, should have smth to tackle this
         }
     }
 }
