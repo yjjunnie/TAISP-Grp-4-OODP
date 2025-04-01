@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class CLIMenu {
-    private Integer currentWeek;
+    private static Integer currentWeek;
     private FarmManagerUI farmManagerUI; // CLIMenu passes UI handling to FarmManagerUI.
     private Scanner io;
 
@@ -110,7 +110,7 @@ public class CLIMenu {
         System.out.println("------------- Current Week: " + currentWeek + " -------------");
     }
 
-    public int getcurrentWeek() {
+    public int getCurrentWeek() {
         return currentWeek;
     }
 }
