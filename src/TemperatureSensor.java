@@ -5,7 +5,7 @@ class TemperatureSensor extends Sensor {
     // Bidirectional association 
     public void setRealTemp(RealTemp realTemp) {
         this.realTemp = realTemp;
-        realTemp.setTempSensor(this);
+        realTemp.setTemperatureSensor(this);
     }
     public RealTemp getRealTemp() {
         return realTemp;
