@@ -1,30 +1,35 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.locks.Condition;
 
 public class LandCrop extends Crop {
 
-    public LandCrop(String name, int seedlingTime, int matureTime,  int[] temperature, int[] humidity, int[] lightExposure, int[] soilMoisture) {
-        super(name, seedlingTime, matureTime);
+    public LandCrop(String name, int seedlingWeeks, int matureWeeks,  int[] temperature, int[] humidity, int[] lightExposure, int[] soilMoisture) {
+        super(name, seedlingWeeks, matureWeeks);
 
         // get the hash map
-        HashMap<String, int[]> conditions = this.getConditions();
+        HashMap<ConditionType, int[]> conditions = this.getConditions();
 
         // set conditions
-        String[] landConditions = new String[]{"Temperature", "Humidity", "Light Exposure", "Soil Moisture"};
-        this.setConditionName(landConditions);
+        List<ConditionType> landConditions = getConditionType();
+        ConditionType[] landConditionNames = {ConditionType.TEMPERATURE, ConditionType.HUMIDITY, ConditionType.LIGHT, ConditionType.MOISTURE} ;
+        landConditions.addAll(List.of(landConditionNames));
+
 
         // fill hashmap
-        for (String condition : this.getConditionName()) {
+        for (ConditionType condition : landConditions) {
             switch (condition) {
-                case "Temperature":
+                case TEMPERATURE:
                     conditions.put(condition, temperature);
                     break;
-                case "Humidity":
+                case HUMIDITY:
                     conditions.put(condition, humidity);
                     break;
-                case "Light Exposure":
+                case LIGHT:
                     conditions.put(condition, lightExposure);
                     break;
-                case "Soil Moisture":
+                case MOISTURE:
                     conditions.put(condition, soilMoisture);
                     break;
                 default:

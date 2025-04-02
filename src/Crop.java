@@ -1,43 +1,45 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Crop {
     private String name;
-    public int seedlingTime;
-    public int matureTime;
-    private HashMap <String, int[]> conditions;
-    private String[] conditionName;
+    public int seedlingWeeks;
+    public int matureWeeks;
+    private HashMap <ConditionType, int[]> conditions;
+    private List<ConditionType> conditionType;
 
-    public Crop(String name, int seedlingTime, int matureTime) {
+    public Crop(String name, int seedlingWeeks, int matureWeeks) {
         this.name = name;
-        this.seedlingTime = seedlingTime;
-        this.matureTime = matureTime;
+        this.seedlingWeeks = seedlingWeeks;
+        this.matureWeeks = matureWeeks;
         this.conditions = new HashMap<>();
-        this.conditionName = new String[]{};
+        this.conditionType = new ArrayList<>();
     }
 
     // prints conditions neatly, can be changed later on
     public void printConditions() {
-        for (String condition: conditions.keySet()) {
+        for (ConditionType condition: conditions.keySet()) {
             System.out.println(condition + ": ");
             System.out.print("Min: " + conditions.get(condition)[0]);
             System.out.println(", Max: " + conditions.get(condition)[1]);
         }
     }
 
-    public int getSeedlingTime() {
-        return seedlingTime;
+    public int getSeedlingWeeks() {
+        return seedlingWeeks;
     }
 
-    public void setSeedlingTime(int seedlingTime) {
-        this.seedlingTime = seedlingTime;
+    public void setSeedlingWeeks(int seedlingWeeks) {
+        this.seedlingWeeks = seedlingWeeks;
     }
 
-    public int getMatureTime() {
-        return matureTime;
+    public int getMatureWeeks() {
+        return matureWeeks;
     }
 
-    public void setMatureTime(int matureTime) {
-        this.matureTime = matureTime;
+    public void setMatureWeeks(int matureWeeks) {
+        this.matureWeeks = matureWeeks;
     }
 
     // below are get set for variables
@@ -49,20 +51,20 @@ public class Crop {
         this.name = name;
     }
 
-    public HashMap<String, int[]> getConditions() {
+    public HashMap<ConditionType, int[]> getConditions() {
         return conditions;
     }
 
-    public void setConditions(HashMap<String, int[]> conditions) {
+    public void setConditions(HashMap<ConditionType, int[]> conditions) {
         this.conditions = conditions;
     }
 
-    public String[] getConditionName() {
-        return conditionName;
+    public List<ConditionType> getConditionType() {
+        return conditionType;
     }
 
-    public void setConditionName(String[] conditionName) {
-        this.conditionName = conditionName;
+    public void setConditionType(List<ConditionType> conditionType) {
+        this.conditionType = conditionType;
     }
 }
 
