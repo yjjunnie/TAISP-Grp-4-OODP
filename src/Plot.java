@@ -1,3 +1,5 @@
+import java.security.Key;
+import java.security.KeyException;
 import java.util.*;
 
 abstract class Plot {
@@ -10,8 +12,8 @@ abstract class Plot {
     private int estSeedlingWeek;
     private int estMatureWeek;
     private int plantedWeek;
-    private ArrayList<Sensor> sensors;
-    private int punishment;
+    private ArrayList<Sensor> sensors = new ArrayList<Sensor>();
+    private int punishment = 0;
 
 
     public Plot(Crop crop, int plantedWeek) {
@@ -21,59 +23,60 @@ abstract class Plot {
         this.plantedWeek = plantedWeek;
         this.estSeedlingWeek = plantedWeek + crop.getSeedlingWeeks();
         this.estMatureWeek = plantedWeek + crop.getMatureWeeks();
-        this.punishment = 0;
-        this.sensors = new ArrayList<Sensor>();
         initializeSensors();
     }
 
     public abstract void initializeSensors();
 
-    public HashMap<String, Integer> getCurrentConditions() {
+    public HashMap<ConditionType, Integer> getCurrentConditions() {
 
-        HashMap<String, Integer> conditions = new HashMap<>();
+        HashMap<ConditionType, Integer> currentConditions = new HashMap<>();
 
         for (Sensor sensor : sensors) {
-            String conditionType = sensor.getConditionType();
+            ConditionType conditionType = sensor.getConditionType();
             int condition = sensor.getCondition();
-            conditions.put(conditionType, condition);
+            currentConditions.put(conditionType, condition);
         }
 
-        return conditions;
+        return currentConditions;
     }
 
     // Replacing clearAlert() with setConditions()
-    public void setConditions(String conditionType, int condition) {
+    public void setConditions(ConditionType conditionType, int condition) {
         for (Sensor sensor : sensors) {
             if (sensor.getConditionType() == conditionType) {
                 sensor.setCondition(condition);
             }
         }
-        // Might want to raise alert again
     }
 
-    public boolean raiseAlert() {
-        HashMap<String, Integer> currentConditions = getCurrentConditions();
-        HashMap<String, Integer[]> requiredConditions = crop.getConditions();
+    public HashMap<ConditionType, Integer> raiseAlert() throws KeyException {
+        HashMap<ConditionType, Integer> currentConditions = getCurrentConditions();
+        HashMap<ConditionType, Integer[]> requiredConditions = crop.getConditions();
+        HashMap<ConditionType, Integer> alerts = new HashMap<>();
 
-        for (String conditionType : requiredConditions.keySet()) {
+        for (ConditionType conditionType : requiredConditions.keySet()) {
             Integer[] range = requiredConditions.get(conditionType);
 
             if (currentConditions.containsKey(conditionType)) {
                 Integer currentValue = currentConditions.get(conditionType);
 
                 if (currentValue < range[0] || currentValue > range[1]) {
-                    return true;
+                    alerts.put(conditionType, currentValue);
                 }
             }
+            else {
+                throw new KeyException("Plot does not have " + conditionType.name().toLowerCase() + " sensor");
+            }
         }
-        return false;
+        return alerts;
     }
 
-    // Depends on whether plots can be reused, may have to change construction functionality 
-    public String harvestCrop(int currentWeek) {
-        if (currentWeek >= getEstMatureWeek()) {
-            return crop.getName();
+    public boolean isHarvestable() {
+        if (climenu.getCurrentWeek() >= getEstMatureWeek()) {
+            return true;
         }
+        return false;
     }
 
     public String getGrowthStage(int currentWeek) {
