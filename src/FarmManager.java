@@ -1,3 +1,4 @@
+import java.security.KeyException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,7 @@ public class FarmManager {
         }
     }
 
-    public void displayAllPlotsConditions(int week) {
+    public void displayAllPlotsConditions(int week) throws KeyException {
         // displayAllPlotsCrops but for plot conditions, and if any alerts.
         if (plotList.isEmpty()) {
             System.out.println("There are currently 0 plots, please create some plots through the Manage Menu.");
@@ -53,24 +54,25 @@ public class FarmManager {
                     System.out.println(entry.getKey().toString() +": " + entry.getValue());
                 }
             
-            if (plot.raiseAlert()) {
+            if (plot.raiseAlert() != null) {
                 System.out.println("ALERT: One or more conditions are out of the acceptable range!");
             }
         }
 
     }
 
-    public ArrayList<Integer> displayAllAlertPlots() {
+    public ArrayList<Integer> displayAllAlertPlots() throws KeyException {
         boolean hasAlert = false;
         ArrayList<Integer> alertPlotIds = new ArrayList<Integer>();
         int count = 0;
 
         for(Plot plot : plotList) {
-            if(plot.raiseAlert) {
+            HashMap<ConditionType, Integer> plotAlerts = plot.raiseAlert();
+            if(plotAlerts != null) {
                 System.out.println("Alert " + ++count + ":");
                 System.out.println("PlotID:" + plot.getId());
 
-                for(HashMap.Entry<ConditionType, Integer> entry : plot.getCurrentConditions().entrySet()) {
+                for(HashMap.Entry<ConditionType, Integer> entry : plotAlerts.entrySet()) {
                     System.out.println(entry.getKey().toString() +": " + entry.getValue());
                 }
                 

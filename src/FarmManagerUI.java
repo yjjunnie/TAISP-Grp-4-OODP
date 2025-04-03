@@ -172,6 +172,9 @@ public class FarmManagerUI {
 					continue;
 				}
 
+			}catch(KeyException e) {
+				System.out.println("ERROR! Unexpected KeyError has occurred!");
+				return;
 			}catch(InputMismatchException e) {
 				System.out.println("ERROR! Invalid selection, please try again!");
 				io.nextLine(); // Clearing buffer only when error 
@@ -213,6 +216,9 @@ public class FarmManagerUI {
 					continue;
 				}
 				
+			}catch(KeyException e) {
+				System.out.println("ERROR! Unexpected KeyError has occurred!");
+				return;
 			}catch(InputMismatchException e) {
 				System.out.println("ERROR! Invalid selection, please try again!");
 				io.nextLine(); // Clearing buffer only when error 
