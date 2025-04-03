@@ -68,7 +68,7 @@ public class FarmManager {
 
     public ArrayList<Integer> displayAllHarvestable(int week) {
         ArrayList<Integer> plotIds = new ArrayList<Integer>();
-        List<Plot> filteredPlotsList = plotList.stream().filter(plot -> plot.getGrowthStage(week) == "Mature - Ready to harvest").toList();
+        List<Plot> filteredPlotsList = plotList.stream().filter(plot -> plot.isHarvestable()).toList();
 
         if (plotList.isEmpty()) {
             System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");

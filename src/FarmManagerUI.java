@@ -304,11 +304,11 @@ public class FarmManagerUI {
     
     public void initCrops() {
     	// Enhancement with CVS reading
-    	cropsList.add(new LandCrop("Wheat", 20, 30));
-    	cropsList.add(new LandCrop("Corn", 20, 40));
-    	cropsList.add(new LandCrop("Tomatoes", 15, 10));
-    	cropsList.add(new AquaticCrop("Lettuce", 20, 30));
-    	cropsList.add(new AquaticCrop("Spinach", 20, 40));
-    	cropsList.add(new AquaticCrop("Peppers", 15, 10));
+//    	cropsList.add(new LandCrop("Wheat", 20, 30));
+//    	cropsList.add(new LandCrop("Corn", 20, 40));
+//    	cropsList.add(new LandCrop("Tomatoes", 15, 10));
+//    	cropsList.add(new AquaticCrop("Lettuce", 20, 30));
+//    	cropsList.add(new AquaticCrop("Spinach", 20, 40));
+//    	cropsList.add(new AquaticCrop("Peppers", 15, 10));
     }
 }
