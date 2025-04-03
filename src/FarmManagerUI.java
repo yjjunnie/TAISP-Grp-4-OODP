@@ -128,7 +128,7 @@ public class FarmManagerUI {
 						continue;
 					}
 
-					return;
+					isComplete = true;
 				} else {
 					System.out.println("ERROR! Invalid selection, please try again!");
 					continue;
@@ -166,7 +166,7 @@ public class FarmManagerUI {
 				else if(plotIds.contains(selection)) {
 					// ADJUSTMENT CODE
 
-					return;
+					isComplete = true;
 				} else {
 					System.out.println("ERROR! Invalid selection, please try again!");
 					continue;
@@ -187,81 +187,42 @@ public class FarmManagerUI {
     }
 
 	public void alertMenu() {
-		System.out.println("ALERT MENU: Displaying all plots with alerts.");
+		boolean isComplete = false;
+    	int selection;
 
-		// Get a list of all plot IDs.
-		List<Integer> allPlotIds = farmManager.getPlotIds();
-		// List to hold IDs of plots that currently have alerts.
-		List<Integer> alertPlotIds = new ArrayList<>();
+		while(!isComplete) {
+			try{
+				List<Integer> alertIds = farmManager.displayAllAlertPlots();
 
-		// Display plots that have alerts.
-		for (Integer id : allPlotIds) {
-			Plot p = farmManager.getPlotById(id);
-			if (p != null && p.raiseAlert()) {
-				alertPlotIds.add(id);
-				System.out.println("-------------------------------------------------");
-				System.out.println("Plot ID: " + p.getId() + " | Crop: " + p.getCrop().getName());
-				System.out.println("Current Conditions: " + p.getCurrentConditions().toString());
-				System.out.println("Ideal Conditions: " + p.getCrop().getConditions().toString());
-				System.out.println("-------------------------------------------------");
-			}
-		}
-
-		if (alertPlotIds.isEmpty()) {
-			System.out.println("There are no plots currently with alerts.");
-			return;
-		}
-
-		// Prompt user to select a plot by ID.
-		System.out.println("Enter the ID of the plot you wish to update conditions for, or -1 to cancel:");
-		System.out.print("> ");
-		int selectedId = io.nextInt();
-
-		if (selectedId == -1) {
-			System.out.println("Operation cancelled.");
-			return;
-		}
-
-		if (!alertPlotIds.contains(selectedId)) {
-			System.out.println("Invalid selection. The entered ID does not correspond to a plot with alerts.");
-			return;
-		}
-
-		// Retrieve the selected plot.
-		Plot selectedPlot = farmManager.getPlotById(selectedId);
-		if (selectedPlot == null) {
-			System.out.println("Plot not found.");
-			return;
-		}
-
-		// For each condition, if the current reading is out-of-range, prompt the user to enter a new value.
-		HashMap<String, Integer> currentConds = selectedPlot.getCurrentConditions();
-		HashMap<String, int[]> idealConds = selectedPlot.getCrop().getConditions();
-
-		for (String conditionType : idealConds.keySet()) {
-			int[] range = idealConds.get(conditionType);
-			if (currentConds.containsKey(conditionType)) {
-				int currentValue = currentConds.get(conditionType);
-				if (currentValue < range[0] || currentValue > range[1]) {
-					System.out.println("Condition '" + conditionType + "' is out-of-range: current value = "
-							+ currentValue + ", ideal range = [" + range[0] + ", " + range[1] + "]");
-					System.out.print("Enter new value for " + conditionType + " (or -1 to skip): ");
-					int newVal = io.nextInt();
-					if (newVal != -1) {
-						// Update the condition; the plot's setConditions() method updates the sensor value. and should remove alert too
-						selectedPlot.setConditions(conditionType, newVal);
-					}
+				if (alertIds == null) {
+					return;
 				}
-			}
-		}
 
-		// Display updated conditions.
-		System.out.println("Updated Conditions for Plot ID " + selectedPlot.getId() + ": "
-				+ selectedPlot.getCurrentConditions().toString());
-		if (!selectedPlot.raiseAlert()) {
-			System.out.println("Alerts cleared for Plot ID " + selectedPlot.getId());
-		} else {
-			System.out.println("Some alerts still persist for Plot ID " + selectedPlot.getId());
+				System.out.println("Enter the ID of the plot you wish to update conditions for, or -1 to cancel:");
+				System.out.print("> ");
+				selection = io.nextInt();
+
+				if (selectedId == -1) {
+					return;
+				}else if (alertPlotIds.contains(selectedId)) {
+					// ADJUSTMENT CODE
+					
+					isComplete = true;
+				}else {
+					System.out.println("ERROR! Invalid selection, please try again!");
+					continue;
+				}
+				
+			}catch(InputMismatchException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
+			}catch(NumberFormatException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
+			}catch(Exception e) {
+				System.out.println("ERROR! Unexpected error has occured, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
+			}
 		}
 	}
 

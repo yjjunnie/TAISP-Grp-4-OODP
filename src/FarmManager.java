@@ -66,6 +66,33 @@ public class FarmManager {
 
     }
 
+    public List<Integer> displayAllAlertPlots() {
+        boolean hasAlert = false;
+        List<Integer> alertPlotIds = new List();
+        int count = 0;
+
+        for(Plot plot : plotList) {
+            if(plot.raiseAlert) {
+                System.out.println("Alert " + ++count + ":");
+                System.out.println("PlotID:" + plot.getId());
+
+                for(HashMap.Entry<ConditionType, Integer> entry : plot.getCurrentConditions().entrySet()) {
+                    System.out.println(entry.getKey().toString() +": " + entry.getValue());
+                }
+                
+                alertPlotIds.add(plot.getId());
+                hasAlert = true;
+            }
+        } 
+
+        if(!hasAlert) {
+            return alertPlotIds;
+        }else {
+            System.out.println("All clear! No current alerts.");
+            return null;
+        }
+    }
+
     public ArrayList<Integer> displayAllHarvestable(int week) {
         ArrayList<Integer> plotIds = new ArrayList<Integer>();
         List<Plot> filteredPlotsList = plotList.stream().filter(plot -> plot.isHarvestable()).toList();
