@@ -1,26 +1,121 @@
-class FarmManager {
-    public ArrayList<Plot> plotList;
-    public ArrayList<PlotManager> plotManagers;  // FarmManager manages one or more PlotManagers
+import java.util.*;
+import java.util.stream.Collectors;
 
+public class FarmManager {
+    // List to store Plot objects.
+    private ArrayList<Plot> plotList;
+
+    // Constructor initializes the plot list.
     public FarmManager() {
-        this.plotList = new ArrayList<>();
-        this.plotManagers = new ArrayList<>();
+        plotList = new ArrayList<>();
     }
 
-    public Plot findPlot(Map<String, Object> parameters) {
-        // Dummy implementation: return the first plot that meets criteria.
-        // In a full implementation, you would check plot attributes against parameters.
-        for (Plot plot : plotList) {
-            return plot;
+    public List<Integer> getPlotIds() {
+        return plotList.stream().map(Plot::getId).collect(Collectors.toList());
+    }
+
+    public Plot getPlotById(int id) {
+        for (Plot p : plotList) {
+            if (p.getId() == id) {
+                return p;
+            }
         }
         return null;
     }
 
-    public void addPlot(Plot plot) {
-        plotList.add(plot);
+
+    public void displayAllPlotsCrops(int week) {
+        if (plotList.isEmpty())
+            System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");
+        else {
+            System.out.println("There are currently " + plotList.size() + " plots.");
+            for (Plot plot : plotList) {
+                System.out.println("PlotID\tCrop\tGrowth Stage\tHarvest Status\n");
+                System.out.print(plot.getId() + "\t" + plot.getCrop().getName());
+
+                if (plot.getEstMatureWeek() > week)
+                    System.out.print("\t" + plot.getGrowthStage(week) + "\tNot Ready");
+                else
+                    System.out.print("\tMature\tReady");
+
+            }
+        }
     }
 
-    public void addPlotManager(PlotManager plotManager) {
-        plotManagers.add(plotManager);
+    public void displayAllPlotsConditions(int week) {
+        // displayAllPlotsCrops but for plot conditions, and if any alerts.
+        if (plotList.isEmpty()) {
+            System.out.println("There are currently 0 plots, please create some plots through the Manage Menu.");
+            return;
+        }
+
+        System.out.println("Plot Conditions for Week " + week + ":");
+        System.out.println("--------------------------------------------");
+        for (Plot p : plotList) {
+            System.out.println("Plot ID: " + p.getId());
+            // Retrieve current sensor readings from the plot.
+            HashMap<String, Integer> currentConds = p.getCurrentConditions();
+            System.out.println("Current Conditions: " + currentConds.toString());
+
+            // Check and display alert if any condition is out of the ideal range.
+            if (p.raiseAlert()) {
+                System.out.println("ALERT: One or more conditions are out of the acceptable range!");
+            }
+            System.out.println("--------------------------------------------");
+        }
+
+    }
+
+    public ArrayList<Integer> displayAllHarvestable(int week) {
+        ArrayList<Integer> plotIds = new ArrayList<Integer>();
+        List<Plot> filteredPlotsList = plotList.stream().filter(plot -> plot.getGrowthStage(week) == "Mature - Ready to harvest").toList();
+
+        if (plotList.isEmpty()) {
+            System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");
+        } else if (filteredPlotsList.isEmpty()) {
+            System.out.println("Sorry, there are currently no plots that are ready to harvest.");
+        } else {
+
+            System.out.println("There are currently " + filteredPlotsList.size() + " plots ready to harvest, please select one.");
+            for (Plot plot : filteredPlotsList) {
+                plotIds.add(plot.getId());
+                System.out.println(plot.getId() + "\t" + plot.getCrop().getName() + "\t" + plot.getGrowthStage(week));
+            }
+            return plotIds;
+        }
+        return null;
+    }
+
+    public void createPlot(Crop crop, int plantedWeek) {
+        System.out.println("ERROR! Unknown crop or plot type, please try again!");
+        // Uses method overloading for plot creation.
+        // Generic method is to prevent compilation error.
+    }
+
+    public void createPlot(LandCrop crop, int plantedWeek) {
+        LandPlot plot = new LandPlot(crop, plantedWeek);
+        plotList.add(plot);
+   }
+   
+   public void createPlot(AquaticCrop crop, int plantedWeek) {
+    	AquaticPlot plot = new AquaticPlot(crop, plantedWeek);
+        plotList.add(plot);
+   }
+
+    public boolean harvestPlot(int plotId){
+        Iterator<Plot> iterator = plotList.iterator();
+
+        while (iterator.hasNext()) {
+            Plot p = iterator.next();
+
+            if (p.getId() == plotId) {
+                iterator.remove();
+                return true;
+            }
+        }
+
+        return false;
     }
 }
+
+

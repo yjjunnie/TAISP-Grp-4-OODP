@@ -1,30 +1,131 @@
-class Plot {
-    public Crop crop;
-    public Date estSeedlingDate;
-    public Date estMatureDate;
-    public ArrayList<Sensor> sensors;
-    public int punishment;
+import java.security.Key;
+import java.security.KeyException;
+import java.util.*;
 
-    public Plot(Crop crop, Date estSeedlingDate, Date estMatureDate) {
+abstract class Plot {
+    // Static variables
+    private static int numOfPlots = 0;
+
+    // Instance variables
+    private int id;
+    private Crop crop;
+    private int estSeedlingWeek;
+    private int estMatureWeek;
+    private int plantedWeek;
+    private ArrayList<Sensor> sensors = new ArrayList<Sensor>();
+    private int punishment = 0;
+
+
+    public Plot(Crop crop, int plantedWeek) {
+        this.id = Plot.numOfPlots;
+        Plot.numOfPlots++;
         this.crop = crop;
-        this.estSeedlingDate = estSeedlingDate;
-        this.estMatureDate = estMatureDate;
-        this.sensors = new ArrayList<>();
-        this.punishment = 0;
+        this.plantedWeek = plantedWeek;
+        this.estSeedlingWeek = plantedWeek + crop.getSeedlingWeeks();
+        this.estMatureWeek = plantedWeek + crop.getMatureWeeks();
+        initializeSensors();
     }
 
-    public void addSensor(Sensor sensor) {
-        sensors.add(sensor);
+    public abstract void initializeSensors();
+
+    public HashMap<ConditionType, Integer> getCurrentConditions() {
+
+        HashMap<ConditionType, Integer> currentConditions = new HashMap<>();
+
+        for (Sensor sensor : sensors) {
+            ConditionType conditionType = sensor.getConditionType();
+            int condition = sensor.getCondition();
+            currentConditions.put(conditionType, condition);
+        }
+
+        return currentConditions;
     }
 
-    public void checkConditions() {
-        System.out.println("Checking conditions for plot with crop: " + crop.name);
-        // Here you could add logic to iterate through sensors and evaluate crop conditions
+    // Replacing clearAlert() with setConditions()
+    public void setConditions(ConditionType conditionType, int condition) {
+        for (Sensor sensor : sensors) {
+            if (sensor.getConditionType() == conditionType) {
+                sensor.setCondition(condition);
+            }
+        }
     }
 
-    public void clear() {
-        System.out.println("Clearing plot with crop: " + crop.name);
-        punishment = 0;
-        // Reset or update other plot attributes as needed
+    public HashMap<ConditionType, Integer> raiseAlert() throws KeyException {
+        HashMap<ConditionType, Integer> currentConditions = getCurrentConditions();
+        HashMap<ConditionType, Integer[]> requiredConditions = crop.getConditions();
+        HashMap<ConditionType, Integer> alerts = new HashMap<>();
+
+        for (ConditionType conditionType : requiredConditions.keySet()) {
+            Integer[] range = requiredConditions.get(conditionType);
+
+            if (currentConditions.containsKey(conditionType)) {
+                Integer currentValue = currentConditions.get(conditionType);
+
+                if (currentValue < range[0] || currentValue > range[1]) {
+                    alerts.put(conditionType, currentValue);
+                }
+            }
+            else {
+                throw new KeyException("Plot does not have " + conditionType.name().toLowerCase() + " sensor");
+            }
+        }
+        return alerts;
+    }
+
+    public boolean isHarvestable() {
+        if (climenu.getCurrentWeek() >= getEstMatureWeek()) {
+            return true;
+        }
+        return false;
+    }
+
+    public String getGrowthStage(int currentWeek) {
+        if (currentWeek < getEstSeedlingWeek()) {
+            return "Seed";
+        } else if (currentWeek < getEstMatureWeek()) {
+            return "Seedling";
+        } else {
+            return "Mature - Ready to harvest";
+        }
+    }
+
+    public static int getNumOfPlots() {
+        return numOfPlots;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Crop getCrop() {
+        return crop;
+    }
+
+    public int getEstSeedlingWeek() {
+        return estSeedlingWeek;
+    }
+
+    public int getEstMatureWeek() {
+        return estMatureWeek;
+    }
+
+    public int getPlantedWeek() {
+        return plantedWeek;
+    }
+
+    public ArrayList<Sensor> getSensors() {
+        return sensors;
+    }
+
+    public int getPunishment() {
+        return punishment;
+    }
+
+    public void setCrop(Crop crop) {
+        this.crop = crop;
+    }
+
+    public void setPunishment(int punishment) {
+        this.punishment = punishment;
     }
 }
