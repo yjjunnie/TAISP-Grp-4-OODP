@@ -30,14 +30,11 @@ public class FarmManager {
         else {
             System.out.println("There are currently " + plotList.size() + " plots.");
             for (Plot plot : plotList) {
+                System.out.println("PlotID:" + plot.getId());
+                System.out.println("Crop:" + plot.getCrop().getName());
+                System.out.println("Growth Stage:" + plot.getGrowthStage(week));
+                System.out.println("Harvest Status:" + (plot.isHarvestable() ? "Harvestable" : "Not Harvestable"));
                 System.out.println("PlotID\tCrop\tGrowth Stage\tHarvest Status\n");
-                System.out.print(plot.getId() + "\t" + plot.getCrop().getName());
-
-                if (plot.getEstMatureWeek() > week)
-                    System.out.print("\t" + plot.getGrowthStage(week) + "\tNot Ready");
-                else
-                    System.out.print("\tMature\tReady");
-
             }
         }
     }
@@ -49,26 +46,23 @@ public class FarmManager {
             return;
         }
 
-        System.out.println("Plot Conditions for Week " + week + ":");
-        System.out.println("--------------------------------------------");
-        for (Plot p : plotList) {
-            System.out.println("Plot ID: " + p.getId());
-            // Retrieve current sensor readings from the plot.
-            HashMap<String, Integer> currentConds = p.getCurrentConditions();
-            System.out.println("Current Conditions: " + currentConds.toString());
+        for (Plot plot : plotList) {
+            System.out.println("PlotID:" + plot.getId());
 
-            // Check and display alert if any condition is out of the ideal range.
-            if (p.raiseAlert()) {
+                for(HashMap.Entry<ConditionType, Integer> entry : plot.getCurrentConditions().entrySet()) {
+                    System.out.println(entry.getKey().toString() +": " + entry.getValue());
+                }
+            
+            if (plot.raiseAlert()) {
                 System.out.println("ALERT: One or more conditions are out of the acceptable range!");
             }
-            System.out.println("--------------------------------------------");
         }
 
     }
 
-    public List<Integer> displayAllAlertPlots() {
+    public ArrayList<Integer> displayAllAlertPlots() {
         boolean hasAlert = false;
-        List<Integer> alertPlotIds = new List();
+        ArrayList<Integer> alertPlotIds = new ArrayList<Integer>();
         int count = 0;
 
         for(Plot plot : plotList) {
@@ -99,18 +93,20 @@ public class FarmManager {
 
         if (plotList.isEmpty()) {
             System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");
+            return null;
         } else if (filteredPlotsList.isEmpty()) {
             System.out.println("Sorry, there are currently no plots that are ready to harvest.");
+            return null;
         } else {
 
             System.out.println("There are currently " + filteredPlotsList.size() + " plots ready to harvest, please select one.");
             for (Plot plot : filteredPlotsList) {
-                plotIds.add(plot.getId());
-                System.out.println(plot.getId() + "\t" + plot.getCrop().getName() + "\t" + plot.getGrowthStage(week));
+                System.out.println("PlotID:" + plot.getId());
+                System.out.println("Crop:" + plot.getCrop().getName());
+                System.out.println("Growth Stage:" + plot.getGrowthStage(week));
             }
             return plotIds;
         }
-        return null;
     }
 
     public void createPlot(Crop crop, int plantedWeek) {

@@ -192,7 +192,7 @@ public class FarmManagerUI {
 
 		while(!isComplete) {
 			try{
-				List<Integer> alertIds = farmManager.displayAllAlertPlots();
+				ArrayList<Integer> alertIds = farmManager.displayAllAlertPlots();
 
 				if (alertIds == null) {
 					return;
@@ -202,9 +202,9 @@ public class FarmManagerUI {
 				System.out.print("> ");
 				selection = io.nextInt();
 
-				if (selectedId == -1) {
+				if (selection == -1) {
 					return;
-				}else if (alertPlotIds.contains(selectedId)) {
+				}else if (alertIds.contains(selection)) {
 					// ADJUSTMENT CODE
 					
 					isComplete = true;
