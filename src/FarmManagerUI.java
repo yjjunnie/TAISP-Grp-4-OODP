@@ -80,7 +80,7 @@ public class FarmManagerUI {
         		
         		
         		for(Crop crop : filteredCropsList) {
-        			System.out.println(++index + ". " + crop.name);
+        			System.out.println(++index + ". " + crop.getName());
         		}
         		System.out.print("> ");
         		selection = io.nextInt();
@@ -185,12 +185,89 @@ public class FarmManagerUI {
 		}
 		
     }
-    
-    public void alertMenu() {
-    	
-    }
-    
-    public void viewMenu(int week) {
+
+	public void alertMenu() {
+		System.out.println("ALERT MENU: Displaying all plots with alerts.");
+
+		// Get a list of all plot IDs.
+		List<Integer> allPlotIds = farmManager.getPlotIds();
+		// List to hold IDs of plots that currently have alerts.
+		List<Integer> alertPlotIds = new ArrayList<>();
+
+		// Display plots that have alerts.
+		for (Integer id : allPlotIds) {
+			Plot p = farmManager.getPlotById(id);
+			if (p != null && p.raiseAlert()) {
+				alertPlotIds.add(id);
+				System.out.println("-------------------------------------------------");
+				System.out.println("Plot ID: " + p.getId() + " | Crop: " + p.getCrop().getName());
+				System.out.println("Current Conditions: " + p.getCurrentConditions().toString());
+				System.out.println("Ideal Conditions: " + p.getCrop().getConditions().toString());
+				System.out.println("-------------------------------------------------");
+			}
+		}
+
+		if (alertPlotIds.isEmpty()) {
+			System.out.println("There are no plots currently with alerts.");
+			return;
+		}
+
+		// Prompt user to select a plot by ID.
+		System.out.println("Enter the ID of the plot you wish to update conditions for, or -1 to cancel:");
+		System.out.print("> ");
+		int selectedId = io.nextInt();
+
+		if (selectedId == -1) {
+			System.out.println("Operation cancelled.");
+			return;
+		}
+
+		if (!alertPlotIds.contains(selectedId)) {
+			System.out.println("Invalid selection. The entered ID does not correspond to a plot with alerts.");
+			return;
+		}
+
+		// Retrieve the selected plot.
+		Plot selectedPlot = farmManager.getPlotById(selectedId);
+		if (selectedPlot == null) {
+			System.out.println("Plot not found.");
+			return;
+		}
+
+		// For each condition, if the current reading is out-of-range, prompt the user to enter a new value.
+		HashMap<String, Integer> currentConds = selectedPlot.getCurrentConditions();
+		HashMap<String, int[]> idealConds = selectedPlot.getCrop().getConditions();
+
+		for (String conditionType : idealConds.keySet()) {
+			int[] range = idealConds.get(conditionType);
+			if (currentConds.containsKey(conditionType)) {
+				int currentValue = currentConds.get(conditionType);
+				if (currentValue < range[0] || currentValue > range[1]) {
+					System.out.println("Condition '" + conditionType + "' is out-of-range: current value = "
+							+ currentValue + ", ideal range = [" + range[0] + ", " + range[1] + "]");
+					System.out.print("Enter new value for " + conditionType + " (or -1 to skip): ");
+					int newVal = io.nextInt();
+					if (newVal != -1) {
+						// Update the condition; the plot's setConditions() method updates the sensor value. and should remove alert too
+						selectedPlot.setConditions(conditionType, newVal);
+					}
+				}
+			}
+		}
+
+		// Display updated conditions.
+		System.out.println("Updated Conditions for Plot ID " + selectedPlot.getId() + ": "
+				+ selectedPlot.getCurrentConditions().toString());
+		if (!selectedPlot.raiseAlert()) {
+			System.out.println("Alerts cleared for Plot ID " + selectedPlot.getId());
+		} else {
+			System.out.println("Some alerts still persist for Plot ID " + selectedPlot.getId());
+		}
+	}
+
+
+
+	public void viewMenu(int week) {
     	Boolean isComplete = false;
 		int selection;
 		
