@@ -73,7 +73,7 @@ abstract class Plot {
     }
 
     public boolean isHarvestable() {
-        if (climenu.getCurrentWeek() >= getEstMatureWeek()) {
+        if ((new Time()).getCurrentWeek() >= getEstMatureWeek()) {
             return true;
         }
         return false;

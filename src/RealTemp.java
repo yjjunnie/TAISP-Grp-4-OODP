@@ -1,7 +1,7 @@
 import java.util.Random;
 
 class RealTemp implements Simulator {
-    int day_diff = climenu.getCurrentDay() - dayLastCleared; //use for randomiser ??
+    int day_diff = (new Time()).getCurrentWeek() - dayLastCleared; //use for randomiser ??
     private TemperatureSensor temperatureSensor;
     private Random random = new Random();
 
