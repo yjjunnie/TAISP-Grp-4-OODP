@@ -5,15 +5,12 @@ import java.util.stream.Collectors;
 public class FarmManagerUI {
     private FarmManager farmManager; // CLIMenu passes UI handling to FarmManagerUI.
     private Scanner io;
-    private ArrayList<Crop> cropsList;
     private Time time;
 
     public FarmManagerUI() {
         this.time = new Time(0);
         this.farmManager = new FarmManager();
         this.io = new Scanner(System.in);
-        this.cropsList = new ArrayList<Crop>();
-        initCrops();
     }
     
     public void manageMenu(int week) {
@@ -55,7 +52,7 @@ public class FarmManagerUI {
     	int selection;
 
     	while(!isComplete) {
-    		List<Crop> filteredCropsList;
+    		List<? extends Crop> filteredCropsList;
         	int index = 0;
     		try {
         		System.out.println("Plot Creation.\n"
@@ -67,32 +64,42 @@ public class FarmManagerUI {
         		selection = io.nextInt();
         		
         		switch(selection) { // Open Close Principle violated.
-        			case 1 -> {
-        				System.out.println("Select crop type for soil plot");
-        				filteredCropsList = cropsList.stream().filter(crop -> crop instanceof LandCrop).collect(Collectors.toList());
-        			}
-        			case 2 -> {
-        				System.out.println("Select crop type for aquatic plot");
-        				filteredCropsList = cropsList.stream().filter(crop -> crop instanceof AquaticCrop).collect(Collectors.toList());
-        			}
-        			default -> {
-        				System.out.println("ERROR! Invalid selection, please try again!");
-        				continue;
-        			}
+	        		case 1 -> {
+	    				System.out.println("Select crop type for soil plot");
+	    				filteredCropsList = farmManager.getCropListByType(LandCrop.class);
+	    			}
+	    			case 2 -> {
+	    				System.out.println("Select crop type for aquatic plot");
+	    				filteredCropsList = farmManager.getCropListByType(AquaticCrop.class);
+	    			}
+	    			default -> {
+	    				System.out.println("ERROR! Invalid selection, please try again!");
+	    				continue;
+	    			}
         		}
         		
         		
         		for(Crop crop : filteredCropsList) {
         			System.out.println(++index + ". " + crop.getName());
         		}
+        		
         		System.out.print("> ");
         		selection = io.nextInt();
+        		
         		if(selection < 1 || selection > index) {
         			System.out.println("ERROR! Invalid selection, please try again!");
     				continue;
         		}else {
-        			farmManager.createPlot(filteredCropsList.get(index - 1), week);
-        			isComplete = true;
+        			Crop selectedCrop = filteredCropsList.get(selection - 1);
+        			if(selectedCrop instanceof LandCrop) {
+            			farmManager.createPlot((LandCrop) selectedCrop, week);
+            			isComplete = true;
+        			}else if(selectedCrop instanceof AquaticCrop) {
+            			farmManager.createPlot((AquaticCrop) selectedCrop, week);
+            			isComplete = true;
+        			}else {
+            			farmManager.createPlot(selectedCrop, week);
+        			}
         		}
         		
     		}catch(InputMismatchException e) {
@@ -270,18 +277,6 @@ public class FarmManagerUI {
 		}
     }
 
-    
-    public void initCrops() {
-    	// Enhancement with CVS reading int[] temperature, int[] humidity, int[] lightExposure, int[] soilMoisture
-    	int[] temp = {25, 35};
-		cropsList.add(new LandCrop("Wheat", 20, 30, temp, temp, temp, temp));
-		cropsList.add(new LandCrop("Corn", 20, 40, temp, temp, temp, temp));
-		cropsList.add(new LandCrop("Tomatoes", 15, 10, temp, temp, temp, temp));
-		cropsList.add(new AquaticCrop("Lettuce", 20, 30, temp, temp, temp));
-		cropsList.add(new AquaticCrop("Spinach", 20, 40, temp, temp, temp));
-		cropsList.add(new AquaticCrop("Peppers", 15, 10, temp, temp, temp));
-    }
-
 	public void handleFastFoward() {
 		Boolean isComplete = false;
     	Boolean confirmed = false;
@@ -336,7 +331,6 @@ public class FarmManagerUI {
     public void fastForward(int weeks) {
     	int currentWeek = time.getCurrentWeek() + weeks;
         time.setCurrentWeek(currentWeek);
-//        <TBC>.ffRandomize(currentWeek);
         System.out.println("------------- Current Week: " + currentWeek + " -------------");
     }
 }

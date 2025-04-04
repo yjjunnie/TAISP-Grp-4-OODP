@@ -5,10 +5,25 @@ import java.util.stream.Collectors;
 public class FarmManager {
     // List to store Plot objects.
     private ArrayList<Plot> plotList;
+    private ArrayList<Crop> cropsList;
 
     // Constructor initializes the plot list.
     public FarmManager() {
         plotList = new ArrayList<>();
+        this.cropsList = new ArrayList<Crop>();
+        initCrops();
+    }
+
+    
+    public void initCrops() {
+    	// Enhancement with CVS reading int[] temperature, int[] humidity, int[] lightExposure, int[] soilMoisture
+    	int[] temp = {25, 35};
+		cropsList.add(new LandCrop("Wheat", 20, 30, temp, temp, temp, temp));
+		cropsList.add(new LandCrop("Corn", 20, 40, temp, temp, temp, temp));
+		cropsList.add(new LandCrop("Tomatoes", 15, 10, temp, temp, temp, temp));
+		cropsList.add(new AquaticCrop("Lettuce", 20, 30, temp, temp, temp));
+		cropsList.add(new AquaticCrop("Spinach", 20, 40, temp, temp, temp));
+		cropsList.add(new AquaticCrop("Peppers", 15, 10, temp, temp, temp));
     }
 
     public List<Integer> getPlotIds() {
@@ -24,6 +39,13 @@ public class FarmManager {
         return null;
     }
     
+    public <T extends Crop> ArrayList<? extends Crop> getCropListByType(Class<T> cropType) {
+    	return (ArrayList<? extends Crop>) cropsList.stream()
+    			.filter(cropType::isInstance)
+                .map(cropType::cast)
+                .collect(Collectors.toList());
+    }
+    
     public boolean hasAlerts() throws KeyException {
     	for (Plot p : plotList) {
             if (!p.raiseAlert().isEmpty()) {
@@ -36,15 +58,14 @@ public class FarmManager {
 
     public void displayAllPlotsCrops(int week) {
         if (plotList.isEmpty())
-            System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");
+            System.out.println("\nThere are currently 0 plots, please create some plots through <Manage> Menu.");
         else {
             System.out.println("There are currently " + plotList.size() + " plots.");
             for (Plot plot : plotList) {
-                System.out.println("PlotID:" + plot.getId());
-                System.out.println("Crop:" + plot.getCrop().getName());
-                System.out.println("Growth Stage:" + plot.getGrowthStage(week));
-                System.out.println("Harvest Status:" + (plot.isHarvestable() ? "Harvestable" : "Not Harvestable"));
-                System.out.println("PlotID\tCrop\tGrowth Stage\tHarvest Status\n");
+                System.out.println("PlotID: " + plot.getId());
+                System.out.println("Crop: " + plot.getCrop().getName());
+                System.out.println("Growth Stage: " + plot.getGrowthStage(week));
+                System.out.println("Harvest Status: " + (plot.isHarvestable() ? "Harvestable\n" : "Not Harvestable\n"));
             }
         }
     }
@@ -95,7 +116,7 @@ public class FarmManager {
             }
         } 
 
-        if(!hasAlert) {
+        if(hasAlert) {
             return alertPlotIds;
         }else {
             System.out.println("All clear! No current alerts.");
@@ -120,6 +141,7 @@ public class FarmManager {
                 System.out.println("PlotID:" + plot.getId());
                 System.out.println("Crop:" + plot.getCrop().getName());
                 System.out.println("Growth Stage:" + plot.getGrowthStage(week));
+                plotIds.add(plot.getId());
             }
             return plotIds;
         }
@@ -134,11 +156,13 @@ public class FarmManager {
     public void createPlot(LandCrop crop, int plantedWeek) {
         LandPlot plot = new LandPlot(crop, plantedWeek);
         plotList.add(plot);
+        System.out.println("Land Plot planted with " + crop.getName() + " is created!");
    }
    
    public void createPlot(AquaticCrop crop, int plantedWeek) {
     	AquaticPlot plot = new AquaticPlot(crop, plantedWeek);
         plotList.add(plot);
+        System.out.println("Aquatic Plot planted with " + crop.getName() + " is created!");
    }
 
     public boolean harvestPlot(int plotId){
@@ -176,7 +200,7 @@ public class FarmManager {
                         System.out.print("> ");
                         int inputValue = io.nextInt();
                         
-                        if(inputValue < maxMin[0] || maxMin[1] < inputValue) {
+                        if(inputValue >= maxMin[0] && inputValue <= maxMin[1]) {
                             plot.setConditions(entry.getKey(), inputValue);
                             validValue = true;
                         }else {
