@@ -1,12 +1,12 @@
 import java.util.*;
 
 public class CLIMenu {
-    private static Integer currentWeek;
     private FarmManagerUI farmManagerUI; // CLIMenu passes UI handling to FarmManagerUI.
     private Scanner io;
+    private Time time;
 
     public CLIMenu() {
-        this.currentWeek = 0;
+        time = new Time(0);
         this.farmManagerUI = new FarmManagerUI();
         this.io = new Scanner(System.in);
     }
@@ -17,7 +17,7 @@ public class CLIMenu {
     	
     	while(!isComplete) {
     		try {
-        		System.out.println("Farm Management CLI Commands (Week "+ currentWeek +"):\n"
+        		System.out.println("Farm Management CLI Commands (Week "+ time.getCurrentWeek() +"):\n"
         				+ "1. View .......... View crop/envrionment data\n"
         				+ "2. Manage ........ Manage farm plots\n"
         				+ "3. Update ........ Modify farm conditions\n"
@@ -29,9 +29,9 @@ public class CLIMenu {
         		selection = io.nextInt();
         		
         		switch(selection) {
-        			case 1 -> farmManagerUI.viewMenu(currentWeek);
-        			case 2 -> farmManagerUI.manageMenu(currentWeek);
-        			case 3 -> farmManagerUI.updateMenu(currentWeek);
+        			case 1 -> farmManagerUI.viewMenu(time.getCurrentWeek());
+        			case 2 -> farmManagerUI.manageMenu(time.getCurrentWeek());
+        			case 3 -> farmManagerUI.updateMenu(time.getCurrentWeek());
         			case 4 -> farmManagerUI.alertMenu();
         			case 5 -> handleFastFoward();
         			case 6 -> isComplete = true;
@@ -53,10 +53,6 @@ public class CLIMenu {
     	System.out.println("Terminating Session. Thank you for using COF System!");
     }
     
-    public void handleManage() {
-    	
-    }
-    
     public void handleFastFoward() {
     	Boolean isComplete = false;
     	Boolean confirmed = false;
@@ -64,24 +60,24 @@ public class CLIMenu {
     	
     	loop:while(!isComplete) {
     		try {
-//    			if(farmManager.hasAlerts()) {
-//    				while(!confirmed) {
-//        				System.out.println("There are still pending alerts, fast forwarding will extend crop\n"
-//                				+ "1. Ignore and continue with fast foward.\n"
-//                				+ "2. Cancel fast fowarding.");
-//
-//                		System.out.print("> ");
-//        				userInput = io.nextInt();
-//        				
-//        				switch(userInput) { // Using : case for breaking out of LABELLED loop.
-//    	        			case 1: 
-//    	        				confirmed = true;
-//    	        				break;
-//    	        			case 2: break loop;
-//    	        			default: System.out.println("ERROR! Invalid selection, please try again!");
-//        				}
-//    				}
-//    			}
+    			if(farmManagerUI.hasAlerts()) {
+    				while(!confirmed) {
+        				System.out.println("There are still pending alerts, fast forwarding will extend crop\n"
+                				+ "1. Ignore and continue with fast foward.\n"
+                				+ "2. Cancel fast fowarding.");
+
+                		System.out.print("> ");
+        				userInput = io.nextInt();
+        				
+        				switch(userInput) { // Using : case for breaking out of LABELLED loop.
+    	        			case 1: 
+    	        				confirmed = true;
+    	        				break;
+    	        			case 2: break loop;
+    	        			default: System.out.println("ERROR! Invalid selection, please try again!");
+        				}
+    				}
+    			}
     			
         		System.out.println("Enter the amount of weeks you wish to fast forward by.");
         		
@@ -105,12 +101,9 @@ public class CLIMenu {
     }
 
     public void fastForward(int weeks) {
-        currentWeek += weeks;
+    	int currentWeek = time.getCurrentWeek() + weeks;
+        time.setCurrentWeek(currentWeek);
 //        <TBC>.ffRandomize(currentWeek);
         System.out.println("------------- Current Week: " + currentWeek + " -------------");
-    }
-
-    public int getCurrentWeek() {
-        return currentWeek;
     }
 }
