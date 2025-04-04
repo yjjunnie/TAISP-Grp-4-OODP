@@ -115,7 +115,8 @@ public class FarmManagerUI {
 		while(!isComplete) {
 			try{
 				ArrayList<Integer> plotIds = farmManager.displayAllHarvestable(week);
-				if(plotIds.size() == 0) return;
+				if(plotIds == null) return; // No plots created
+				if(plotIds.size() == 0) return; // No harvestable crops
 
 				System.out.println("Enter the id of the plot you wish to harvest, or -1 to cancel.");
 					
@@ -159,7 +160,7 @@ public class FarmManagerUI {
 				farmManager.displayAllPlotsConditions(week);
 				List<Integer> plotIds = farmManager.getPlotIds();
 				
-				if(plotIds.size() == 0) return;
+				if(plotIds == null || plotIds.isEmpty()) return; // No plots created
 				System.out.println("Enter the id of the plot you wish to adjust, or -1 to cancel.");
 				
 				System.out.print("> ");
@@ -199,7 +200,7 @@ public class FarmManagerUI {
 			try{
 				ArrayList<Integer> alertIds = farmManager.displayAllAlertPlots();
 
-				if (alertIds == null) {
+				if (alertIds == null || alertIds.isEmpty()) {
 					return;
 				}
 
@@ -316,7 +317,10 @@ public class FarmManagerUI {
         		fastForward(userInput);
         		isComplete = true;
         		
-    		}catch(InputMismatchException e) {
+    		}catch(KeyException e) {
+				System.out.println("ERROR! Unexpected KeyError has occurred!");
+				return;
+			}catch(InputMismatchException e) {
 				System.out.println("ERROR! Invalid selection, please try again!");
 	    		io.nextLine(); // Clearing buffer only when error 
 			}catch(NumberFormatException e) {

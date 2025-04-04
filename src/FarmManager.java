@@ -74,6 +74,11 @@ public class FarmManager {
         boolean hasAlert = false;
         ArrayList<Integer> alertPlotIds = new ArrayList<Integer>();
         int count = 0;
+        
+        if (plotList.isEmpty()) {
+            System.out.println("There are currently 0 plots, please create some plots through the Manage Menu.");
+            return null;
+        }
 
         for(Plot plot : plotList) {
             HashMap<ConditionType, Integer> plotAlerts = plot.raiseAlert();
