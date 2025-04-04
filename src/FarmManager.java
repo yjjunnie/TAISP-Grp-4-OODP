@@ -58,15 +58,14 @@ public class FarmManager {
 
     public void displayAllPlotsCrops(int week) {
         if (plotList.isEmpty())
-            System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");
+            System.out.println("\nThere are currently 0 plots, please create some plots through <Manage> Menu.");
         else {
             System.out.println("There are currently " + plotList.size() + " plots.");
             for (Plot plot : plotList) {
-                System.out.println("PlotID:" + plot.getId());
-                System.out.println("Crop:" + plot.getCrop().getName());
-                System.out.println("Growth Stage:" + plot.getGrowthStage(week));
-                System.out.println("Harvest Status:" + (plot.isHarvestable() ? "Harvestable" : "Not Harvestable"));
-                System.out.println("PlotID\tCrop\tGrowth Stage\tHarvest Status\n");
+                System.out.println("PlotID: " + plot.getId());
+                System.out.println("Crop: " + plot.getCrop().getName());
+                System.out.println("Growth Stage: " + plot.getGrowthStage(week));
+                System.out.println("Harvest Status: " + (plot.isHarvestable() ? "Harvestable\n" : "Not Harvestable\n"));
             }
         }
     }
@@ -157,11 +156,13 @@ public class FarmManager {
     public void createPlot(LandCrop crop, int plantedWeek) {
         LandPlot plot = new LandPlot(crop, plantedWeek);
         plotList.add(plot);
+        System.out.println("Land Plot planted with " + crop.getName() + " is created!");
    }
    
    public void createPlot(AquaticCrop crop, int plantedWeek) {
     	AquaticPlot plot = new AquaticPlot(crop, plantedWeek);
         plotList.add(plot);
+        System.out.println("Aquatic Plot planted with " + crop.getName() + " is created!");
    }
 
     public boolean harvestPlot(int plotId){

@@ -82,14 +82,24 @@ public class FarmManagerUI {
         		for(Crop crop : filteredCropsList) {
         			System.out.println(++index + ". " + crop.getName());
         		}
+        		
         		System.out.print("> ");
         		selection = io.nextInt();
+        		
         		if(selection < 1 || selection > index) {
         			System.out.println("ERROR! Invalid selection, please try again!");
     				continue;
         		}else {
-        			farmManager.createPlot(filteredCropsList.get(selection - 1), week);
-        			isComplete = true;
+        			Crop selectedCrop = filteredCropsList.get(selection - 1);
+        			if(selectedCrop instanceof LandCrop) {
+            			farmManager.createPlot((LandCrop) selectedCrop, week);
+            			isComplete = true;
+        			}else if(selectedCrop instanceof AquaticCrop) {
+            			farmManager.createPlot((AquaticCrop) selectedCrop, week);
+            			isComplete = true;
+        			}else {
+            			farmManager.createPlot(selectedCrop, week);
+        			}
         		}
         		
     		}catch(InputMismatchException e) {
@@ -321,7 +331,6 @@ public class FarmManagerUI {
     public void fastForward(int weeks) {
     	int currentWeek = time.getCurrentWeek() + weeks;
         time.setCurrentWeek(currentWeek);
-//        <TBC>.ffRandomize(currentWeek);
         System.out.println("------------- Current Week: " + currentWeek + " -------------");
     }
 }
