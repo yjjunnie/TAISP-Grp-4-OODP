@@ -1,3 +1,4 @@
+import java.security.KeyException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -164,8 +165,7 @@ public class FarmManagerUI {
 
 				if(selection == -1) return;
 				else if(plotIds.contains(selection)) {
-					// ADJUSTMENT CODE
-
+					farmManager.editPlotConditions(selection);
 					isComplete = true;
 				} else {
 					System.out.println("ERROR! Invalid selection, please try again!");
@@ -208,8 +208,7 @@ public class FarmManagerUI {
 				if (selection == -1) {
 					return;
 				}else if (alertIds.contains(selection)) {
-					// ADJUSTMENT CODE
-					
+					farmManager.editPlotConditions(selection);
 					isComplete = true;
 				}else {
 					System.out.println("ERROR! Invalid selection, please try again!");
@@ -270,12 +269,13 @@ public class FarmManagerUI {
 
     
     public void initCrops() {
-    	// Enhancement with CVS reading
-//    	cropsList.add(new LandCrop("Wheat", 20, 30));
-//    	cropsList.add(new LandCrop("Corn", 20, 40));
-//    	cropsList.add(new LandCrop("Tomatoes", 15, 10));
-//    	cropsList.add(new AquaticCrop("Lettuce", 20, 30));
-//    	cropsList.add(new AquaticCrop("Spinach", 20, 40));
-//    	cropsList.add(new AquaticCrop("Peppers", 15, 10));
+    	// Enhancement with CVS reading int[] temperature, int[] humidity, int[] lightExposure, int[] soilMoisture
+    	int[] temp = {25, 35};
+		cropsList.add(new LandCrop("Wheat", 20, 30, temp, temp, temp, temp));
+		cropsList.add(new LandCrop("Corn", 20, 40, temp, temp, temp, temp));
+		cropsList.add(new LandCrop("Tomatoes", 15, 10, temp, temp, temp, temp));
+		cropsList.add(new AquaticCrop("Lettuce", 20, 30, temp, temp, temp));
+		cropsList.add(new AquaticCrop("Spinach", 20, 40, temp, temp, temp));
+		cropsList.add(new AquaticCrop("Peppers", 15, 10, temp, temp, temp));
     }
 }

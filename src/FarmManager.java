@@ -141,6 +141,51 @@ public class FarmManager {
 
         return false;
     }
+
+    public void editPlotConditions(int plotId) {
+        Scanner io = new Scanner(System.in);
+        Plot plot = getPlotById(plotId);
+        HashMap<ConditionType, int[]> cropConditionList = plot.getCrop().getConditions();
+        boolean isComplete = false;
+
+		while(!isComplete) {
+			try{
+                System.out.println("Editing plot with ID:  " + plot.getId());
+                
+                for(HashMap.Entry<ConditionType, Integer> entry : plot.getCurrentConditions().entrySet()) {
+                    Boolean validValue = false;
+                    int[] maxMin = cropConditionList.get(entry.getKey());
+                    
+                    while(!validValue) {
+                        System.out.println(entry.getKey() + " [ Min: " + maxMin[0] + ", Max:" + maxMin[1] + " ]" );
+                        
+                        System.out.print("> ");
+                        int inputValue = io.nextInt();
+                        
+                        if(inputValue < maxMin[0] || maxMin[1] < inputValue) {
+                            plot.setConditions(entry.getKey(), inputValue);
+                            validValue = true;
+                        }else {
+                            System.out.println("ERROR! Value out of crops range, please try again!");
+                            continue;
+                        }
+                        
+                    }
+                }
+			}catch(InputMismatchException e) {
+				System.out.println("ERROR! Invalid input, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
+			}catch(NumberFormatException e) {
+				System.out.println("ERROR! Invalid input, please try again using integers only!");
+				io.nextLine(); // Clearing buffer only when error 
+			}catch(Exception e) {
+				System.out.println("ERROR! Unexpected error has occured, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
+			}
+		}
+
+        System.out.println("Success! Plot conditions have been updated.");
+    }
 }
 
 
