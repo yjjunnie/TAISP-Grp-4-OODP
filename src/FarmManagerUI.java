@@ -6,8 +6,10 @@ public class FarmManagerUI {
     private FarmManager farmManager; // CLIMenu passes UI handling to FarmManagerUI.
     private Scanner io;
     private ArrayList<Crop> cropsList;
+    private Time time;
 
     public FarmManagerUI() {
+        this.time = new Time(0);
         this.farmManager = new FarmManager();
         this.io = new Scanner(System.in);
         this.cropsList = new ArrayList<Crop>();
@@ -277,5 +279,60 @@ public class FarmManagerUI {
 		cropsList.add(new AquaticCrop("Lettuce", 20, 30, temp, temp, temp));
 		cropsList.add(new AquaticCrop("Spinach", 20, 40, temp, temp, temp));
 		cropsList.add(new AquaticCrop("Peppers", 15, 10, temp, temp, temp));
+    }
+
+	public void handleFastFoward() {
+		Boolean isComplete = false;
+    	Boolean confirmed = false;
+    	int userInput;
+    	
+    	loop:while(!isComplete) {
+    		try {
+    			if(farmManager.hasAlerts()) {
+    				while(!confirmed) {
+        				System.out.println("There are still pending alerts, fast forwarding will extend crop\n"
+                				+ "1. Ignore and continue with fast foward.\n"
+                				+ "2. Cancel fast fowarding.");
+
+                		System.out.print("> ");
+        				userInput = io.nextInt();
+        				
+        				switch(userInput) { // Using : case for breaking out of LABELLED loop.
+    	        			case 1: 
+    	        				// Append Punishment
+    	        				confirmed = true;
+    	        				break;
+    	        			case 2: break loop;
+    	        			default: System.out.println("ERROR! Invalid selection, please try again!");
+        				}
+    				}
+    			}
+    			
+        		System.out.println("Enter the amount of weeks you wish to fast forward by.");
+        		
+        		System.out.print(">: ");
+        		userInput = io.nextInt();
+        		
+        		fastForward(userInput);
+        		isComplete = true;
+        		
+    		}catch(InputMismatchException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}catch(NumberFormatException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}catch(Exception e) {
+				System.out.println("ERROR! Unexpected error has occured, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}
+    	}
+	}
+
+    public void fastForward(int weeks) {
+    	int currentWeek = time.getCurrentWeek() + weeks;
+        time.setCurrentWeek(currentWeek);
+//        <TBC>.ffRandomize(currentWeek);
+        System.out.println("------------- Current Week: " + currentWeek + " -------------");
     }
 }

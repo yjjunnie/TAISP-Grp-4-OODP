@@ -23,6 +23,15 @@ public class FarmManager {
         }
         return null;
     }
+    
+    public boolean hasAlerts() throws KeyException {
+    	for (Plot p : plotList) {
+            if (!p.raiseAlert().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     public void displayAllPlotsCrops(int week) {
@@ -54,7 +63,7 @@ public class FarmManager {
                     System.out.println(entry.getKey().toString() +": " + entry.getValue());
                 }
             
-            if (plot.raiseAlert() != null) {
+            if (!plot.raiseAlert().isEmpty()) {
                 System.out.println("ALERT: One or more conditions are out of the acceptable range!");
             }
         }
