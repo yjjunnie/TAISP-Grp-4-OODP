@@ -5,15 +5,12 @@ import java.util.stream.Collectors;
 public class FarmManagerUI {
     private FarmManager farmManager; // CLIMenu passes UI handling to FarmManagerUI.
     private Scanner io;
-    private ArrayList<Crop> cropsList;
     private Time time;
 
     public FarmManagerUI() {
         this.time = new Time(0);
         this.farmManager = new FarmManager();
         this.io = new Scanner(System.in);
-        this.cropsList = new ArrayList<Crop>();
-        initCrops();
     }
     
     public void manageMenu(int week) {
@@ -55,7 +52,7 @@ public class FarmManagerUI {
     	int selection;
 
     	while(!isComplete) {
-    		List<Crop> filteredCropsList;
+    		List<? extends Crop> filteredCropsList;
         	int index = 0;
     		try {
         		System.out.println("Plot Creation.\n"
@@ -67,18 +64,18 @@ public class FarmManagerUI {
         		selection = io.nextInt();
         		
         		switch(selection) { // Open Close Principle violated.
-        			case 1 -> {
-        				System.out.println("Select crop type for soil plot");
-        				filteredCropsList = cropsList.stream().filter(crop -> crop instanceof LandCrop).collect(Collectors.toList());
-        			}
-        			case 2 -> {
-        				System.out.println("Select crop type for aquatic plot");
-        				filteredCropsList = cropsList.stream().filter(crop -> crop instanceof AquaticCrop).collect(Collectors.toList());
-        			}
-        			default -> {
-        				System.out.println("ERROR! Invalid selection, please try again!");
-        				continue;
-        			}
+	        		case 1 -> {
+	    				System.out.println("Select crop type for soil plot");
+	    				filteredCropsList = farmManager.getCropListByType(LandCrop.class);
+	    			}
+	    			case 2 -> {
+	    				System.out.println("Select crop type for aquatic plot");
+	    				filteredCropsList = farmManager.getCropListByType(AquaticCrop.class);
+	    			}
+	    			default -> {
+	    				System.out.println("ERROR! Invalid selection, please try again!");
+	    				continue;
+	    			}
         		}
         		
         		
@@ -91,7 +88,7 @@ public class FarmManagerUI {
         			System.out.println("ERROR! Invalid selection, please try again!");
     				continue;
         		}else {
-        			farmManager.createPlot(filteredCropsList.get(index - 1), week);
+        			farmManager.createPlot(filteredCropsList.get(selection - 1), week);
         			isComplete = true;
         		}
         		
@@ -268,18 +265,6 @@ public class FarmManagerUI {
 	    		io.nextLine(); // Clearing buffer only when error 
 			}
 		}
-    }
-
-    
-    public void initCrops() {
-    	// Enhancement with CVS reading int[] temperature, int[] humidity, int[] lightExposure, int[] soilMoisture
-    	int[] temp = {25, 35};
-		cropsList.add(new LandCrop("Wheat", 20, 30, temp, temp, temp, temp));
-		cropsList.add(new LandCrop("Corn", 20, 40, temp, temp, temp, temp));
-		cropsList.add(new LandCrop("Tomatoes", 15, 10, temp, temp, temp, temp));
-		cropsList.add(new AquaticCrop("Lettuce", 20, 30, temp, temp, temp));
-		cropsList.add(new AquaticCrop("Spinach", 20, 40, temp, temp, temp));
-		cropsList.add(new AquaticCrop("Peppers", 15, 10, temp, temp, temp));
     }
 
 	public void handleFastFoward() {

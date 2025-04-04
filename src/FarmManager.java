@@ -5,10 +5,25 @@ import java.util.stream.Collectors;
 public class FarmManager {
     // List to store Plot objects.
     private ArrayList<Plot> plotList;
+    private ArrayList<Crop> cropsList;
 
     // Constructor initializes the plot list.
     public FarmManager() {
         plotList = new ArrayList<>();
+        this.cropsList = new ArrayList<Crop>();
+        initCrops();
+    }
+
+    
+    public void initCrops() {
+    	// Enhancement with CVS reading int[] temperature, int[] humidity, int[] lightExposure, int[] soilMoisture
+    	int[] temp = {25, 35};
+		cropsList.add(new LandCrop("Wheat", 20, 30, temp, temp, temp, temp));
+		cropsList.add(new LandCrop("Corn", 20, 40, temp, temp, temp, temp));
+		cropsList.add(new LandCrop("Tomatoes", 15, 10, temp, temp, temp, temp));
+		cropsList.add(new AquaticCrop("Lettuce", 20, 30, temp, temp, temp));
+		cropsList.add(new AquaticCrop("Spinach", 20, 40, temp, temp, temp));
+		cropsList.add(new AquaticCrop("Peppers", 15, 10, temp, temp, temp));
     }
 
     public List<Integer> getPlotIds() {
@@ -22,6 +37,13 @@ public class FarmManager {
             }
         }
         return null;
+    }
+    
+    public <T extends Crop> ArrayList<? extends Crop> getCropListByType(Class<T> cropType) {
+    	return (ArrayList<? extends Crop>) cropsList.stream()
+    			.filter(cropType::isInstance)
+                .map(cropType::cast)
+                .collect(Collectors.toList());
     }
     
     public boolean hasAlerts() throws KeyException {
@@ -95,7 +117,7 @@ public class FarmManager {
             }
         } 
 
-        if(!hasAlert) {
+        if(hasAlert) {
             return alertPlotIds;
         }else {
             System.out.println("All clear! No current alerts.");
@@ -120,6 +142,7 @@ public class FarmManager {
                 System.out.println("PlotID:" + plot.getId());
                 System.out.println("Crop:" + plot.getCrop().getName());
                 System.out.println("Growth Stage:" + plot.getGrowthStage(week));
+                plotIds.add(plot.getId());
             }
             return plotIds;
         }
@@ -176,7 +199,7 @@ public class FarmManager {
                         System.out.print("> ");
                         int inputValue = io.nextInt();
                         
-                        if(inputValue < maxMin[0] || maxMin[1] < inputValue) {
+                        if(inputValue >= maxMin[0] && inputValue <= maxMin[1]) {
                             plot.setConditions(entry.getKey(), inputValue);
                             validValue = true;
                         }else {
