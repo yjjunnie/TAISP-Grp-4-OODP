@@ -1,7 +1,7 @@
 import java.util.Random;
 
 class RealHumidity implements Simulator { 
-    int day_diff = climenu.getCurrentDay() - dayLastCleared; //use for randomiser ??
+    int day_diff = (new Time()).getCurrentWeek() - dayLastCleared; //use for randomiser ??
     private HumiditySensor humiditySensor;
     private Random random = new Random();
 

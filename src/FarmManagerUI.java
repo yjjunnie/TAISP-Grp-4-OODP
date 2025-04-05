@@ -1,16 +1,16 @@
+import java.security.KeyException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class FarmManagerUI {
     private FarmManager farmManager; // CLIMenu passes UI handling to FarmManagerUI.
     private Scanner io;
-    private ArrayList<Crop> cropsList;
+    private Time time;
 
     public FarmManagerUI() {
+        this.time = new Time(0);
         this.farmManager = new FarmManager();
         this.io = new Scanner(System.in);
-        this.cropsList = new ArrayList<Crop>();
-        initCrops();
     }
     
     public void manageMenu(int week) {
@@ -52,7 +52,7 @@ public class FarmManagerUI {
     	int selection;
 
     	while(!isComplete) {
-    		List<Crop> filteredCropsList;
+    		List<? extends Crop> filteredCropsList;
         	int index = 0;
     		try {
         		System.out.println("Plot Creation.\n"
@@ -64,32 +64,42 @@ public class FarmManagerUI {
         		selection = io.nextInt();
         		
         		switch(selection) { // Open Close Principle violated.
-        			case 1 -> {
-        				System.out.println("Select crop type for soil plot");
-        				filteredCropsList = cropsList.stream().filter(crop -> crop instanceof LandCrop).collect(Collectors.toList());
-        			}
-        			case 2 -> {
-        				System.out.println("Select crop type for aquatic plot");
-        				filteredCropsList = cropsList.stream().filter(crop -> crop instanceof AquaticCrop).collect(Collectors.toList());
-        			}
-        			default -> {
-        				System.out.println("ERROR! Invalid selection, please try again!");
-        				continue;
-        			}
+	        		case 1 -> {
+	    				System.out.println("Select crop type for soil plot");
+	    				filteredCropsList = farmManager.getCropListByType(LandCrop.class);
+	    			}
+	    			case 2 -> {
+	    				System.out.println("Select crop type for aquatic plot");
+	    				filteredCropsList = farmManager.getCropListByType(AquaticCrop.class);
+	    			}
+	    			default -> {
+	    				System.out.println("ERROR! Invalid selection, please try again!");
+	    				continue;
+	    			}
         		}
         		
         		
         		for(Crop crop : filteredCropsList) {
         			System.out.println(++index + ". " + crop.getName());
         		}
+        		
         		System.out.print("> ");
         		selection = io.nextInt();
+        		
         		if(selection < 1 || selection > index) {
         			System.out.println("ERROR! Invalid selection, please try again!");
     				continue;
         		}else {
-        			farmManager.createPlot(filteredCropsList.get(index - 1), week);
-        			isComplete = true;
+        			Crop selectedCrop = filteredCropsList.get(selection - 1);
+        			if(selectedCrop instanceof LandCrop) {
+            			farmManager.createPlot((LandCrop) selectedCrop, week);
+            			isComplete = true;
+        			}else if(selectedCrop instanceof AquaticCrop) {
+            			farmManager.createPlot((AquaticCrop) selectedCrop, week);
+            			isComplete = true;
+        			}else {
+            			farmManager.createPlot(selectedCrop, week);
+        			}
         		}
         		
     		}catch(InputMismatchException e) {
@@ -112,7 +122,8 @@ public class FarmManagerUI {
 		while(!isComplete) {
 			try{
 				ArrayList<Integer> plotIds = farmManager.displayAllHarvestable(week);
-				if(plotIds.size() == 0) return;
+				if(plotIds == null) return; // No plots created
+				if(plotIds.size() == 0) return; // No harvestable crops
 
 				System.out.println("Enter the id of the plot you wish to harvest, or -1 to cancel.");
 					
@@ -128,7 +139,7 @@ public class FarmManagerUI {
 						continue;
 					}
 
-					return;
+					isComplete = true;
 				} else {
 					System.out.println("ERROR! Invalid selection, please try again!");
 					continue;
@@ -156,7 +167,7 @@ public class FarmManagerUI {
 				farmManager.displayAllPlotsConditions(week);
 				List<Integer> plotIds = farmManager.getPlotIds();
 				
-				if(plotIds.size() == 0) return;
+				if(plotIds == null || plotIds.isEmpty()) return; // No plots created
 				System.out.println("Enter the id of the plot you wish to adjust, or -1 to cancel.");
 				
 				System.out.print("> ");
@@ -164,14 +175,16 @@ public class FarmManagerUI {
 
 				if(selection == -1) return;
 				else if(plotIds.contains(selection)) {
-					// ADJUSTMENT CODE
-
-					return;
+					farmManager.editPlotConditions(selection);
+					isComplete = true;
 				} else {
 					System.out.println("ERROR! Invalid selection, please try again!");
 					continue;
 				}
 
+			}catch(KeyException e) {
+				System.out.println("ERROR! Unexpected KeyError has occurred!");
+				return;
 			}catch(InputMismatchException e) {
 				System.out.println("ERROR! Invalid selection, please try again!");
 				io.nextLine(); // Clearing buffer only when error 
@@ -187,81 +200,44 @@ public class FarmManagerUI {
     }
 
 	public void alertMenu() {
-		System.out.println("ALERT MENU: Displaying all plots with alerts.");
+		boolean isComplete = false;
+    	int selection;
 
-		// Get a list of all plot IDs.
-		List<Integer> allPlotIds = farmManager.getPlotIds();
-		// List to hold IDs of plots that currently have alerts.
-		List<Integer> alertPlotIds = new ArrayList<>();
+		while(!isComplete) {
+			try{
+				ArrayList<Integer> alertIds = farmManager.displayAllAlertPlots();
 
-		// Display plots that have alerts.
-		for (Integer id : allPlotIds) {
-			Plot p = farmManager.getPlotById(id);
-			if (p != null && p.raiseAlert()) {
-				alertPlotIds.add(id);
-				System.out.println("-------------------------------------------------");
-				System.out.println("Plot ID: " + p.getId() + " | Crop: " + p.getCrop().getName());
-				System.out.println("Current Conditions: " + p.getCurrentConditions().toString());
-				System.out.println("Ideal Conditions: " + p.getCrop().getConditions().toString());
-				System.out.println("-------------------------------------------------");
-			}
-		}
-
-		if (alertPlotIds.isEmpty()) {
-			System.out.println("There are no plots currently with alerts.");
-			return;
-		}
-
-		// Prompt user to select a plot by ID.
-		System.out.println("Enter the ID of the plot you wish to update conditions for, or -1 to cancel:");
-		System.out.print("> ");
-		int selectedId = io.nextInt();
-
-		if (selectedId == -1) {
-			System.out.println("Operation cancelled.");
-			return;
-		}
-
-		if (!alertPlotIds.contains(selectedId)) {
-			System.out.println("Invalid selection. The entered ID does not correspond to a plot with alerts.");
-			return;
-		}
-
-		// Retrieve the selected plot.
-		Plot selectedPlot = farmManager.getPlotById(selectedId);
-		if (selectedPlot == null) {
-			System.out.println("Plot not found.");
-			return;
-		}
-
-		// For each condition, if the current reading is out-of-range, prompt the user to enter a new value.
-		HashMap<String, Integer> currentConds = selectedPlot.getCurrentConditions();
-		HashMap<String, int[]> idealConds = selectedPlot.getCrop().getConditions();
-
-		for (String conditionType : idealConds.keySet()) {
-			int[] range = idealConds.get(conditionType);
-			if (currentConds.containsKey(conditionType)) {
-				int currentValue = currentConds.get(conditionType);
-				if (currentValue < range[0] || currentValue > range[1]) {
-					System.out.println("Condition '" + conditionType + "' is out-of-range: current value = "
-							+ currentValue + ", ideal range = [" + range[0] + ", " + range[1] + "]");
-					System.out.print("Enter new value for " + conditionType + " (or -1 to skip): ");
-					int newVal = io.nextInt();
-					if (newVal != -1) {
-						// Update the condition; the plot's setConditions() method updates the sensor value. and should remove alert too
-						selectedPlot.setConditions(conditionType, newVal);
-					}
+				if (alertIds == null || alertIds.isEmpty()) {
+					return;
 				}
-			}
-		}
 
-		// Display updated conditions.
-		System.out.println("Updated Conditions for Plot ID " + selectedPlot.getId() + ": "
-				+ selectedPlot.getCurrentConditions().toString());
-		if (!selectedPlot.raiseAlert()) {
-			System.out.println("Alerts cleared for Plot ID " + selectedPlot.getId());
-		} else {
-			System.out.println("Some alerts still persist for Plot ID " + selectedPlot.getId());
+				System.out.println("Enter the ID of the plot you wish to update conditions for, or -1 to cancel:");
+				System.out.print("> ");
+				selection = io.nextInt();
+
+				if (selection == -1) {
+					return;
+				}else if (alertIds.contains(selection)) {
+					farmManager.editPlotConditions(selection);
+					isComplete = true;
+				}else {
+					System.out.println("ERROR! Invalid selection, please try again!");
+					continue;
+				}
+				
+			}catch(KeyException e) {
+				System.out.println("ERROR! Unexpected KeyError has occurred!");
+				return;
+			}catch(InputMismatchException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
+			}catch(NumberFormatException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
+			}catch(Exception e) {
+				System.out.println("ERROR! Unexpected error has occured, please try again!");
+				io.nextLine(); // Clearing buffer only when error 
+			}
 		}
 	}
 
@@ -301,14 +277,60 @@ public class FarmManagerUI {
 		}
     }
 
-    
-    public void initCrops() {
-    	// Enhancement with CVS reading
-    	cropsList.add(new LandCrop("Wheat", 20, 30));
-    	cropsList.add(new LandCrop("Corn", 20, 40));
-    	cropsList.add(new LandCrop("Tomatoes", 15, 10));
-    	cropsList.add(new AquaticCrop("Lettuce", 20, 30));
-    	cropsList.add(new AquaticCrop("Spinach", 20, 40));
-    	cropsList.add(new AquaticCrop("Peppers", 15, 10));
+	public void handleFastFoward() {
+		Boolean isComplete = false;
+    	Boolean confirmed = false;
+    	int userInput;
+    	
+    	loop:while(!isComplete) {
+    		try {
+    			if(farmManager.hasAlerts()) {
+    				while(!confirmed) {
+        				System.out.println("There are still pending alerts, fast forwarding will extend crop\n"
+                				+ "1. Ignore and continue with fast foward.\n"
+                				+ "2. Cancel fast fowarding.");
+
+                		System.out.print("> ");
+        				userInput = io.nextInt();
+        				
+        				switch(userInput) { // Using : case for breaking out of LABELLED loop.
+    	        			case 1: 
+    	        				// Append Punishment
+    	        				confirmed = true;
+    	        				break;
+    	        			case 2: break loop;
+    	        			default: System.out.println("ERROR! Invalid selection, please try again!");
+        				}
+    				}
+    			}
+    			
+        		System.out.println("Enter the amount of weeks you wish to fast forward by.");
+        		
+        		System.out.print(">: ");
+        		userInput = io.nextInt();
+        		
+        		fastForward(userInput);
+        		isComplete = true;
+        		
+    		}catch(KeyException e) {
+				System.out.println("ERROR! Unexpected KeyError has occurred!");
+				return;
+			}catch(InputMismatchException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}catch(NumberFormatException e) {
+				System.out.println("ERROR! Invalid selection, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}catch(Exception e) {
+				System.out.println("ERROR! Unexpected error has occured, please try again!");
+	    		io.nextLine(); // Clearing buffer only when error 
+			}
+    	}
+	}
+
+    public void fastForward(int weeks) {
+    	int currentWeek = time.getCurrentWeek() + weeks;
+        time.setCurrentWeek(currentWeek);
+        System.out.println("------------- Current Week: " + currentWeek + " -------------");
     }
 }
