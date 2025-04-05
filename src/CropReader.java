@@ -1,14 +1,14 @@
 import java.io.*;
 import java.util.*;
 
-public class cropReader {
+public class CropReader {
     String filePath;
     private List<List<String>> cropData;
     private ArrayList<Crop> cropsList;
 
     // create createCrops and pass filepath into constructor
     // use "get" to get the object list
-    public cropReader(String filePath) {
+    public CropReader(String filePath) {
         this.filePath = filePath;
         this.cropData = readCropCSV();
         this.cropsList = makeCrops();
@@ -23,7 +23,7 @@ public class cropReader {
         try {
             reader =  new BufferedReader(new FileReader(this.filePath));
 
-            String line = reader.readLine();
+            String line;
 
             while ((line = reader.readLine()) != null) {
                 List<String> items = Arrays.asList(line.split(","));
@@ -58,30 +58,41 @@ public class cropReader {
     public ArrayList<Crop> makeCrops() {
         ArrayList<Crop> cropsList = new ArrayList<>();
 
+        if (this.cropData != null) {
+            for (List<String> dataLine : this.cropData) {
+                
+                try {
+                    String name = dataLine.get(0);
+                    String Type = dataLine.get(1);
+                    int seedlingWeeks = Integer.parseInt(dataLine.get(2)) / 7;
+                    int matureWeeks = Integer.parseInt(dataLine.get(3)) / 7;
 
-        for (List<String> dataLine: this.cropData) {
-            String name = dataLine.get(0);
-            String Type = dataLine.get(1);
-            int seedlingWeeks = Integer.parseInt(dataLine.get(2)) / 7;
-            int matureWeeks = Integer.parseInt(dataLine.get(3)) / 7;
+                    int[] temperature = {Integer.parseInt(dataLine.get(4)), Integer.parseInt(dataLine.get(5))};
+                    int[] humidity = {Integer.parseInt(dataLine.get(6)), Integer.parseInt(dataLine.get(7))};
+                    int[] lightExposure = {Integer.parseInt(dataLine.get(8)), Integer.parseInt(dataLine.get(9))};
 
-            int[] temperature = {Integer.parseInt(dataLine.get(4)), Integer.parseInt(dataLine.get(5))};
-            int[] humidity = {Integer.parseInt(dataLine.get(6)), Integer.parseInt(dataLine.get(7))};
-            int[] lightExposure = {Integer.parseInt(dataLine.get(8)), Integer.parseInt(dataLine.get(9))};
-
-            switch(Type) {
-                case "Aquatic":
-                    cropsList.add(new AquaticCrop(name, seedlingWeeks, matureWeeks, temperature, humidity, lightExposure));
-                    break;
-                case "Land":
-                    int[] soilMoisture = {Integer.parseInt(dataLine.get(10)), Integer.parseInt(dataLine.get(11))};
-                    cropsList.add(new LandCrop(name, seedlingWeeks, matureWeeks, temperature, humidity, lightExposure, soilMoisture));
-                    break;
-                default:
-                    break;
+                    switch (Type) {
+                        case "Aquatic":
+                            cropsList.add(new AquaticCrop(name, seedlingWeeks, matureWeeks, temperature, humidity, lightExposure));
+                            break;
+                        case "Land":
+                            int[] soilMoisture = {Integer.parseInt(dataLine.get(10)), Integer.parseInt(dataLine.get(11))};
+                            cropsList.add(new LandCrop(name, seedlingWeeks, matureWeeks, temperature, humidity, lightExposure, soilMoisture));
+                            break;
+                        default:
+                            System.out.println("Unknown crop type: " + Type);
+                            break;
+                    }
+                    
+                } 
+                
+                catch (Exception e) {
+                    System.out.println("Error processing line: " + dataLine);
+                    System.out.println(e);
+                }
+                
             }
         }
-
         return cropsList;
     }
 
