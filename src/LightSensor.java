@@ -13,7 +13,7 @@ class LightSensor extends Sensor {
 
     // Constructor 
     public LightSensor(Crop crop) { 
-        created_day = climenu.getCurrentDay(); //climenu is an instance of CLIMenu 
+        created_day = (new Time()).getCurrentWeek();
         conditionType = "Light Intensity"; 
         condition = 25; //NEED LOGIC to be within specific crop's condition range, when first created will be in optimal condition cuz created with plot 
     }
@@ -21,7 +21,7 @@ class LightSensor extends Sensor {
 
     @Override
     public int getCondition() { // Used to get condition after light sensor is created 
-        if (climenu.getCurrentDay() - created_day == 0) //checking conditions on day of creation 
+        if ((new Time()).getCurrentWeek() - created_day == 0) //checking conditions on day of creation 
             return condition;
         else {
             realLight.setCondition("Light Intensity");
