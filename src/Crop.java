@@ -4,8 +4,8 @@ import java.util.List;
 
 public class Crop {
     private String name;
-    public int seedlingWeeks;
-    public int matureWeeks;
+    private int seedlingWeeks;
+    private int matureWeeks;
     private HashMap <ConditionType, int[]> conditions;
     private List<ConditionType> conditionType;
 
