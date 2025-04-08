@@ -1,44 +1,39 @@
 import java.util.Random;
+import java.util.concurrent.locks.Condition;
 
-public interface Simulator {
-    public int dayLastCleared = 0;
-    public Random random = new Random();
+public abstract class Simulator {
+    protected int WeekLastCleared = 0;
+    protected Random random = new Random();
+    protected int WeekLastRandomised = 0;
+    private int condition;
 
-    /*default void callGetCurrentDay(CLIMenu obj) {
-        obj.getCurrentDay();
+    public int getWeekLastRandomised() {
+        return WeekLastRandomised;
     }
-    public int day_diff = callGetCurrentDay(some cli menu obj??) - dayLastCleared;*/
-    
-    /* 
-    public static <T> double probability(T type) { 
-        double prob = 1.0;
-        if (type instanceof RealHumidity)  //will update probabiltiies ltr 
-            prob = 0.5;
-        else if (type instanceof RealLight)
-            prob = 0.5;
-        else if (type instanceof RealMoisture)
-            prob = 0.5;
-        else if (type instanceof RealTemp)
-            prob = 0.5;
-        return prob;
-    }
-    */
 
-    public static double probability(String conditionType) { // Probabilities for randomizer 
-        double probability = switch (conditionType) {
-            case "Humidity", "Light Intensity", "Moisture Level", "Temperature" -> 0.5;
-            default -> 0.0;
+    public void setWeekLastRandomised(int week) {
+        WeekLastRandomised = week;
+    }
+
+    public static int[] change_range(ConditionType conditionType) { 
+        int[] change_range = switch (conditionType) {
+            case HUMIDITY -> new int[]{-20, 5, 20}; // {min change, norm change, max change}
+            case LIGHT -> new int[]{-1000, 100, 1000};
+            case MOISTURE -> new int[]{-30, 10, 30};
+            case TEMPERATURE -> new int[]{-20, 5, 20};
+            default -> new int[]{0, 0, 0};
         };
-        return probability;
+        return change_range;
     }
 
-    public default int getRandomInt(int min, int max) { //
-        return random.nextInt(max - min + 1) + min; // Random number in [min, max]
-    }
+    public abstract int randomizer();
 
-    public int randomizer(double prob);
+    public int getCondition() {
+        return condition;
+    };
 
-    public int getCondition();
-
-    public void setCondition(String condition);
+    public void setCondition(int value) {
+        this.condition = value;
+        this.WeekLastRandomised = (new Time()).getCurrentWeek();
+    };
 } 

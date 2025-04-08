@@ -1,7 +1,7 @@
 import java.util.Random;
 
 class RealMoisture implements Simulator {
-    int day_diff = (new Time()).getCurrentWeek() - dayLastCleared; //use for randomiser ??
+    int Week_diff = (new Time()).getCurrentWeek() - WeekLastCleared; //use for randomiser ??
     private MoistureSensor moistureSensor;
     private Random random = new Random();
 
