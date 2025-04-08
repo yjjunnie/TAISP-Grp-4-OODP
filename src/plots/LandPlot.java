@@ -1,9 +1,11 @@
 package plots;
 
+import common.ConditionType;
 import crops.Crop;
-import sensors.Sensor;
+import sensors.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class LandPlot extends Plot {
     private ArrayList<Sensor> sensors;
@@ -14,10 +16,16 @@ public class LandPlot extends Plot {
 
     @Override
     public void initializeSensors() {
-//        sensors = getSensors();
-//        sensors.add(new LightSensor());
-//        sensors.add(new TemperatureSensor());
-//        sensors.add(new HumiditySensor());
-//        sensors.add(new MoistureSensor());
+    	HashMap<ConditionType, Integer[]> requiredConditions = getCrop().getConditions();
+        sensors = getSensors();
+        for (ConditionType conditionType : requiredConditions.keySet()) {
+            Integer[] range = requiredConditions.get(conditionType);
+            switch(conditionType) {
+                case LIGHT -> sensors.add(new LightSensor(range));
+                case HUMIDITY -> sensors.add(new HumiditySensor(range));
+                case TEMPERATURE -> sensors.add(new TemperatureSensor(range));
+                case MOISTURE -> sensors.add(new MoistureSensor(range));
+            }
+        }
     }
 }

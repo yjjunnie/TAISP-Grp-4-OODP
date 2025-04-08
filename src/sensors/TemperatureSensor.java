@@ -1,37 +1,29 @@
 package sensors;
 
+import common.ConditionType;
 import common.Time;
-import crops.Crop;
 import simulators.RealTemp;
 
 public class TemperatureSensor extends Sensor {
-    final int created_day;
     private RealTemp realTemp;
 
-    // Bidirectional association 
-    public void setRealTemp(RealTemp realTemp) {
-        this.realTemp = realTemp;
-        realTemp.setTemperatureSensor(this);
-    }
-    public RealTemp getRealTemp() {
-        return realTemp;
-    }
-
     // Constructor 
-    public TemperatureSensor(Crop crop) {
-        created_day = (new Time()).getCurrentWeek();
-        conditionType = "Temperature"; 
-        condition = 25; //NEED LOGIC to be within specific crop's condition range, when first created will be in optimal condition cuz created with plot 
+    public TemperatureSensor(Integer range[]) {
+        setConditionType(ConditionType.TEMPERATURE); // Abstract Sensor
+        realTemp = new RealTemp(range);
     }
 
-
-    @Override
     public int getCondition() { // Used to get condition after humidity sensor is created 
-        if ((new Time()).getCurrentWeek() - created_day == 0) //checking conditions on day of creation 
-            return condition;
+        if ((new Time()).getCurrentWeek() - realTemp.getWeekLastRandomised() == 0) //checking conditions on day of creation 
+            return realTemp.getCondition();
         else {
-            realTemp.setCondition("Temperature");
+            realTemp.randomizeCondition();
+            return realTemp.getCondition();
         }
+    }
+
+    public void setCondition(int value) { // Used to set condition, when farmer updates value
+        realTemp.setCustomCondition(value);
     }
 
 }

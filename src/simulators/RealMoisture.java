@@ -1,43 +1,21 @@
 package simulators;
 
-import common.Time;
-import sensors.MoistureSensor;
+import common.ConditionType;
 
-import java.util.Random;
-
-class RealMoisture implements Simulator {
-    int Week_diff = (new Time()).getCurrentWeek() - WeekLastCleared; //use for randomiser ??
-    private MoistureSensor moistureSensor;
-    private Random random = new Random();
-
-    // Bidirectional association
-    public void setMoistureSensor(MoistureSensor moistureSensor) {
-        this.moistureSensor = moistureSensor;
-    }
-    public MoistureSensor getMoistureSensor() {
-        return moistureSensor;
-    }
+public class RealMoisture extends Simulator {
+    
+    private int healthy_min, healthy_max;
 
     // Constructor 
-    public RealMoisture(MoistureSensor moistureSensor) {
-
+    public RealMoisture(Integer[] desiredRange) {
+        this.healthy_min = desiredRange[0];
+        this.healthy_max = desiredRange[1];
+        setCustomCondition((healthy_min + healthy_max) / 2);
     }
 
-    @Override
-    public int getCondition() {
-        return moistureSensor.getCondition();
+    public void randomizeCondition() {
+        int newCondition = randomizer(ConditionType.MOISTURE, healthy_min, healthy_max);
+        setRandomisedCondition(newCondition);
     }
 
-    @Override
-    public void setCondition(String condition) {
-        double probability = Simulator.probability(moistureSensor.getConditionType());
-        moistureSensor.condition = randomizer(probability);
-    }
-
-    @Override
-    public int randomizer(double prob) {
-        int min = 0, max = 100;
-        int randomizedValue = getRandomInt(min, max) * day_diff;
-        return (int) Math.round(randomizedValue * prob);
-    }
 }

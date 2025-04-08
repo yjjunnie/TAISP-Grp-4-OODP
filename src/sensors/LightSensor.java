@@ -1,36 +1,28 @@
 package sensors;
 
+import common.ConditionType;
 import common.Time;
-import crops.Crop;
 import simulators.RealLight;
 
 public class LightSensor extends Sensor {
-    final int created_day;
     private RealLight realLight;
 
-    // Bidirectional association 
-    public void setRealLight(RealLight realLight) {
-        this.realLight = realLight;
-        realLight.setLightSensor(this);
-    }
-    public RealLight getRealLight() {
-        return realLight;
-    }
-
     // Constructor 
-    public LightSensor(Crop crop) {
-        created_day = (new Time()).getCurrentWeek();
-        conditionType = "Light Intensity"; 
-        condition = 25; //NEED LOGIC to be within specific crop's condition range, when first created will be in optimal condition cuz created with plot 
+    public LightSensor(Integer range[]) {
+        setConditionType(ConditionType.LIGHT); // Abstract Sensor
+        realLight = new RealLight(range);
     }
 
-
-    @Override
-    public int getCondition() { // Used to get condition after light sensor is created 
-        if ((new Time()).getCurrentWeek() - created_day == 0) //checking conditions on day of creation 
-            return condition;
+    public int getCondition() { // Used to get condition after humidity sensor is created 
+        if ((new Time()).getCurrentWeek() - realLight.getWeekLastRandomised() == 0) //checking conditions on day of creation 
+            return realLight.getCondition();
         else {
-            realLight.setCondition("Light Intensity");
+            realLight.randomizeCondition();
+            return realLight.getCondition();
         }
+    }
+
+    public void setCondition(int value) { // Used to set condition, when farmer updates value
+        realLight.setCustomCondition(value);
     }
 }

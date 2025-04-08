@@ -5,7 +5,6 @@ import common.Time;
 import crops.Crop;
 import sensors.Sensor;
 
-import java.security.KeyException;
 import java.util.*;
 
 public abstract class Plot {
@@ -18,7 +17,7 @@ public abstract class Plot {
     private int estSeedlingWeek;
     private int estMatureWeek;
     private int plantedWeek;
-    private ArrayList<Sensor> sensors = new ArrayList<Sensor>();
+    private ArrayList<? extends Sensor> sensors = new ArrayList<>();
     private int punishment = 0;
 
 
@@ -49,7 +48,7 @@ public abstract class Plot {
 
     // Replacing clearAlert() with setConditions()
     public void setConditions(ConditionType conditionType, int condition) {
-        for (Sensor sensor : sensors) {
+    	for (Sensor sensor : sensors) {
             if (conditionType == sensor.getConditionType()) {
                 sensor.setCondition(condition);
             }
@@ -82,7 +81,9 @@ public abstract class Plot {
         return false;
     }
 
-    public String getGrowthStage(int currentWeek) {
+    public String getGrowthStage() {
+    	int currentWeek = (new Time()).getCurrentWeek();
+    	
         if (currentWeek < getEstSeedlingWeek()) {
             return "Seed";
         } else if (currentWeek < getEstMatureWeek()) {
@@ -90,6 +91,13 @@ public abstract class Plot {
         } else {
             return "Mature - Ready to harvest";
         }
+    }
+
+    public void updatePunishment() {
+        // Assumption -> The from day 1 to day n of fastforward, all days are alerts.
+        Time time = new Time();
+        int punishmentIncrement = time.getCurrentWeek() - time.getPriorFFWeek(); // Last randomized day
+        this.punishment += punishmentIncrement;
     }
 
     public static int getNumOfPlots() {
@@ -105,11 +113,11 @@ public abstract class Plot {
     }
 
     public int getEstSeedlingWeek() {
-        return estSeedlingWeek;
+        return estSeedlingWeek + punishment;
     }
 
     public int getEstMatureWeek() {
-        return estMatureWeek;
+        return estMatureWeek + punishment;
     }
 
     public int getPlantedWeek() {
@@ -117,7 +125,7 @@ public abstract class Plot {
     }
 
     public ArrayList<Sensor> getSensors() {
-        return sensors;
+        return (ArrayList<Sensor>) sensors;
     }
 
     public int getPunishment() {

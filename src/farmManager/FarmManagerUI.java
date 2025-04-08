@@ -5,7 +5,6 @@ import crops.Crop;
 import crops.LandCrop;
 import common.Time;
 
-import java.security.KeyException;
 import java.util.*;
 
 public class FarmManagerUI {
@@ -62,7 +61,7 @@ public class FarmManagerUI {
     		List<? extends Crop> filteredCropsList;
         	int index = 0;
     		try {
-        		System.out.println("Plots.Plot Creation.\n"
+        		System.out.println("Plots Creation.\n"
         				+ "Select plot type:\n"
         				+ "1. Soil\n"
         				+ "2. Aquatic");
@@ -182,16 +181,13 @@ public class FarmManagerUI {
 
 				if(selection == -1) return;
 				else if(plotIds.contains(selection)) {
-					farmManager.editPlotConditions(selection);
+					farmManager.editPlotConditions(io, selection);
 					isComplete = true;
 				} else {
 					System.out.println("ERROR! Invalid selection, please try again!");
 					continue;
 				}
 
-			}catch(KeyException e) {
-				System.out.println("ERROR! Unexpected KeyError has occurred!");
-				return;
 			}catch(InputMismatchException e) {
 				System.out.println("ERROR! Invalid selection, please try again!");
 				io.nextLine(); // Clearing buffer only when error 
@@ -225,16 +221,13 @@ public class FarmManagerUI {
 				if (selection == -1) {
 					return;
 				}else if (alertIds.contains(selection)) {
-					farmManager.editPlotConditions(selection);
+					farmManager.editPlotConditions(io, selection);
 					isComplete = true;
 				}else {
 					System.out.println("ERROR! Invalid selection, please try again!");
 					continue;
 				}
 				
-			}catch(KeyException e) {
-				System.out.println("ERROR! Unexpected KeyError has occurred!");
-				return;
 			}catch(InputMismatchException e) {
 				System.out.println("ERROR! Invalid selection, please try again!");
 				io.nextLine(); // Clearing buffer only when error 
@@ -256,8 +249,8 @@ public class FarmManagerUI {
 		
 		while(!isComplete) {
 			try {
-	    		System.out.println("Select plot statuses to view:\n"
-	    				+ "1. Crops.Crop Statuses\n"
+	    		System.out.println("Select view type:\n"
+	    				+ "1. Crops Statuses\n"
 	    				+ "2. Condition Statuses\n"
 	    				+ "3. Back to main menu");
 	    		
@@ -293,7 +286,7 @@ public class FarmManagerUI {
     		try {
     			if(farmManager.hasAlerts()) {
     				while(!confirmed) {
-        				System.out.println("There are still pending alerts, fast forwarding will extend crop\n"
+        				System.out.println("There are still outstanding alerts, fast forwarding will extend crop\n"
                 				+ "1. Ignore and continue with fast foward.\n"
                 				+ "2. Cancel fast fowarding.");
 
@@ -302,7 +295,8 @@ public class FarmManagerUI {
         				
         				switch(userInput) { // Using : case for breaking out of LABELLED loop.
     	        			case 1: 
-    	        				// Append Punishment
+    	        				// Lets user reset conditions of plot
+								// Does NOT clear accured punishments
     	        				confirmed = true;
     	        				break;
     	        			case 2: break loop;
@@ -313,16 +307,14 @@ public class FarmManagerUI {
     			
         		System.out.println("Enter the amount of weeks you wish to fast forward by.");
         		
-        		System.out.print(">: ");
+        		System.out.print("> ");
         		userInput = io.nextInt();
         		
         		fastForward(userInput);
-        		isComplete = true;
-        		
-    		}catch(KeyException e) {
-				System.out.println("ERROR! Unexpected KeyError has occurred!");
-				return;
-			}catch(InputMismatchException e) {
+        		farmManager.triggerRandomize();
+				isComplete = true;
+
+    		}catch(InputMismatchException e) {
 				System.out.println("ERROR! Invalid selection, please try again!");
 	    		io.nextLine(); // Clearing buffer only when error 
 			}catch(NumberFormatException e) {
