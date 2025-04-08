@@ -1,7 +1,12 @@
+package menu;
+
+import common.Time;
+import farmManager.FarmManagerUI;
+
 import java.util.*;
 
 public class CLIMenu {
-    private FarmManagerUI farmManagerUI; // CLIMenu passes UI handling to FarmManagerUI.
+    private FarmManagerUI farmManagerUI; // menu.CLIMenu passes UI handling to farmManager.FarmManagerUI.
     private Scanner io;
 
     public CLIMenu() {

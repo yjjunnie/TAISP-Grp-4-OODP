@@ -1,10 +1,12 @@
+package simulators;
+
 import java.util.Random;
 
 public interface Simulator {
     public int dayLastCleared = 0;
     public Random random = new Random();
 
-    /*default void callGetCurrentDay(CLIMenu obj) {
+    /*default void callGetCurrentDay(menu.CLIMenu obj) {
         obj.getCurrentDay();
     }
     public int day_diff = callGetCurrentDay(some cli menu obj??) - dayLastCleared;*/
@@ -12,13 +14,13 @@ public interface Simulator {
     /* 
     public static <T> double probability(T type) { 
         double prob = 1.0;
-        if (type instanceof RealHumidity)  //will update probabiltiies ltr 
+        if (type instanceof Simulators.RealHumidity)  //will update probabiltiies ltr
             prob = 0.5;
-        else if (type instanceof RealLight)
+        else if (type instanceof Simulators.RealLight)
             prob = 0.5;
-        else if (type instanceof RealMoisture)
+        else if (type instanceof Simulators.RealMoisture)
             prob = 0.5;
-        else if (type instanceof RealTemp)
+        else if (type instanceof Simulators.RealTemp)
             prob = 0.5;
         return prob;
     }

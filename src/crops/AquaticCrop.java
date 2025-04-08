@@ -1,7 +1,10 @@
+package crops;
+
+import common.*;
 import java.util.HashMap;
 import java.util.List;
 
-public class AquaticCrop extends Crop{
+public class AquaticCrop extends Crop {
 
     public AquaticCrop(String name, int seedlingWeeks, int matureWeeks, int[] temperature, int[] humidity, int[] lightExposure) {
         super(name, seedlingWeeks, matureWeeks);
@@ -18,13 +21,13 @@ public class AquaticCrop extends Crop{
         // fill hashmap
         for (ConditionType condition : aquaticConditions) {
             switch (condition) {
-                case TEMPERATURE:
+                case ConditionType.TEMPERATURE:
                     conditions.put(condition, temperature);
                     break;
-                case HUMIDITY:
+                case ConditionType.HUMIDITY:
                     conditions.put(condition, humidity);
                     break;
-                case LIGHT:
+                case ConditionType.LIGHT:
                     conditions.put(condition, lightExposure);
                     break;
                 default:

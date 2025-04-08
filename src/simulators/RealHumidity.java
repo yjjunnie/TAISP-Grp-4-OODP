@@ -1,6 +1,11 @@
+package simulators;
+
+import common.Time;
+import sensors.HumiditySensor;
+
 import java.util.Random;
 
-class RealHumidity implements Simulator { 
+public class RealHumidity implements Simulator {
     int day_diff = (new Time()).getCurrentWeek() - dayLastCleared; //use for randomiser ??
     private HumiditySensor humiditySensor;
     private Random random = new Random();

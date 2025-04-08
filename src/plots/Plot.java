@@ -1,8 +1,14 @@
-import java.security.Key;
+package plots;
+
+import common.ConditionType;
+import common.Time;
+import crops.Crop;
+import sensors.Sensor;
+
 import java.security.KeyException;
 import java.util.*;
 
-abstract class Plot {
+public abstract class Plot {
     // Static variables
     private static int numOfPlots = 0;
 
@@ -44,7 +50,7 @@ abstract class Plot {
     // Replacing clearAlert() with setConditions()
     public void setConditions(ConditionType conditionType, int condition) {
         for (Sensor sensor : sensors) {
-            if (sensor.getConditionType() == conditionType) {
+            if (conditionType == sensor.getConditionType()) {
                 sensor.setCondition(condition);
             }
         }
@@ -66,7 +72,7 @@ abstract class Plot {
                 }
             }
             else {
-                throw new KeyException("Plot does not have " + conditionType.name().toLowerCase() + " sensor");
+                throw new KeyException("Plots.Plot does not have " + conditionType.name().toLowerCase() + " sensor");
             }
         }
         return alerts;

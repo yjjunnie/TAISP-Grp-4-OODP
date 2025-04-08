@@ -1,4 +1,10 @@
-class TemperatureSensor extends Sensor {
+package sensors;
+
+import common.Time;
+import crops.Crop;
+import simulators.RealTemp;
+
+public class TemperatureSensor extends Sensor {
     final int created_day;
     private RealTemp realTemp;
 
@@ -12,7 +18,7 @@ class TemperatureSensor extends Sensor {
     }
 
     // Constructor 
-    public TemperatureSensor(Crop crop) { 
+    public TemperatureSensor(Crop crop) {
         created_day = (new Time()).getCurrentWeek();
         conditionType = "Temperature"; 
         condition = 25; //NEED LOGIC to be within specific crop's condition range, when first created will be in optimal condition cuz created with plot 
