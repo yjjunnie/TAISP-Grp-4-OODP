@@ -1,0 +1,7 @@
+Plant Name,Type,Seedling Time (days),Maturity Time (days),MinTemperature,MaxTemperature,MinHumidity,MaxHumidity,MinLightExposure,MaxLightExposure,MinSoilMoisture,MaxSoilMoisture
+Water Lettuce,Aquatic,11,35,20,30,70,90,5000,10000,NULL,NULL
+Anubias,Aquatic,18,70,22,28,60,80,1000,5000,NULL,NULL
+Water Hyacinth,Aquatic,15,49,22,32,75,95,10000,20000,NULL,NULL
+Tomato,Land,8,70,18,30,50,80,20000,50000,40,60
+Lettuce,Land,11,50,10,22,50,70,10000,30000,60,80
+Carrot,Land,15,75,15,25,40,70,10000,40000,50,70
