@@ -1,6 +1,11 @@
+package plots;
+
+import crops.Crop;
+import sensors.Sensor;
+
 import java.util.ArrayList;
 
-class AquaticPlot extends Plot {
+public class AquaticPlot extends Plot {
     private ArrayList<Sensor> sensors;
 
     public AquaticPlot(Crop crop, int plantedDay) {

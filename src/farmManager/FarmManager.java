@@ -1,9 +1,21 @@
+package farmManager;
+
+import crops.AquaticCrop;
+import crops.Crop;
+import crops.CropReader;
+import crops.LandCrop;
+import common.ConditionType;
+import common.Time;
+import plots.AquaticPlot;
+import plots.LandPlot;
+import plots.Plot;
+
 import java.security.KeyException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class FarmManager {
-    // List to store Plot objects.
+    // List to store Plots.Plot objects.
     private ArrayList<Plot> plotList;
     private ArrayList<Crop> cropsList;
 
@@ -59,7 +71,7 @@ public class FarmManager {
             System.out.println("There are currently " + plotList.size() + " plots.");
             for (Plot plot : plotList) {
                 System.out.println("PlotID: " + plot.getId());
-                System.out.println("Crop: " + plot.getCrop().getName());
+                System.out.println("Crops.Crop: " + plot.getCrop().getName());
                 System.out.println("Growth Stage: " + plot.getGrowthStage(week));
                 System.out.println("Est Seedling: " + plot.getEstSeedlingWeek());
                 System.out.println("Est Harvestable: " + plot.getEstMatureWeek());
@@ -140,7 +152,7 @@ public class FarmManager {
             System.out.println("There are currently " + filteredPlotsList.size() + " plots ready to harvest, please select one.");
             for (Plot plot : filteredPlotsList) {
                 System.out.println("PlotID:" + plot.getId());
-                System.out.println("Crop:" + plot.getCrop().getName());
+                System.out.println("Crops.Crop:" + plot.getCrop().getName());
                 System.out.println("Growth Stage:" + plot.getGrowthStage(week));
                 System.out.println("Est Seedling: " + plot.getEstSeedlingWeek());
                 System.out.println("Est Harvestable: " + plot.getEstMatureWeek());
@@ -159,13 +171,13 @@ public class FarmManager {
     public void createPlot(LandCrop crop, int plantedWeek) {
         LandPlot plot = new LandPlot(crop, plantedWeek);
         plotList.add(plot);
-        System.out.println("Land Plot planted with " + crop.getName() + " is created!");
+        System.out.println("Land Plots.Plot planted with " + crop.getName() + " is created!");
    }
    
    public void createPlot(AquaticCrop crop, int plantedWeek) {
     	AquaticPlot plot = new AquaticPlot(crop, plantedWeek);
         plotList.add(plot);
-        System.out.println("Aquatic Plot planted with " + crop.getName() + " is created!");
+        System.out.println("Aquatic Plots.Plot planted with " + crop.getName() + " is created!");
    }
 
     public boolean harvestPlot(int plotId){
@@ -225,6 +237,6 @@ public class FarmManager {
 			}
 		}
 
-        System.out.println("Success! Plot conditions have been updated.");
+        System.out.println("Success! Plots.Plot conditions have been updated.");
     }
 }

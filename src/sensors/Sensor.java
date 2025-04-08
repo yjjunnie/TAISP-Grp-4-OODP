@@ -1,4 +1,6 @@
-abstract class Sensor {
+package sensors;
+
+public abstract class Sensor {
     protected String conditionType;
     protected int condition;
 

@@ -1,4 +1,10 @@
-class HumiditySensor extends Sensor {
+package sensors;
+
+import common.Time;
+import crops.Crop;
+import simulators.RealHumidity;
+
+public class HumiditySensor extends Sensor {
     final int created_day;
     private RealHumidity realHumidity;
 
@@ -12,7 +18,7 @@ class HumiditySensor extends Sensor {
     }
 
     // Constructor 
-    public HumiditySensor(Crop crop) { 
+    public HumiditySensor(Crop crop) {
         created_day = (new Time()).getCurrentWeek();
         conditionType = "Humidity"; 
         condition = 25; //NEED LOGIC to be within specific crop's condition range, when first created will be in optimal condition cuz created with plot 

@@ -1,3 +1,4 @@
+package common;
 
 public class Time {
     private static Integer currentWeek;
