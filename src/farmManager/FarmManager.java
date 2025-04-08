@@ -55,6 +55,26 @@ public class FarmManager {
         return false;
     }
 
+    public void triggerRandomize() {
+        ArrayList<Plot> plotsWithAlerts = new ArrayList<>();
+        for(Plot plot : plotMap.values()) {
+            HashMap<ConditionType, Integer> plotAlerts = plot.raiseAlert();
+            if(!plotAlerts.isEmpty()) {
+                plotsWithAlerts.add(plot);
+            }
+        }
+        
+        if(plotsWithAlerts.isEmpty()) {
+            System.out.println("Good New! No new alerts!");
+        }else {
+            System.out.println("Bad New! There are "+plotsWithAlerts.size()+" alerts!");
+            for(Plot plot : plotsWithAlerts) {
+                System.out.println("Plot " + plot.getId() + " has alerts.");
+                plot.updatePunishment();
+            }
+        }
+    };
+
 
     public void displayAllPlotsCrops() {
     	int week = (new Time()).getCurrentWeek();
@@ -66,9 +86,10 @@ public class FarmManager {
             for (Plot plot : plotMap.values()) {
                 System.out.println("PlotID: " + plot.getId());
                 System.out.println("Crops.Crop: " + plot.getCrop().getName());
-                System.out.println("Growth Stage: " + plot.getGrowthStage(week));
+                System.out.println("Growth Stage: " + plot.getGrowthStage());
                 System.out.println("Est Seedling: " + plot.getEstSeedlingWeek());
                 System.out.println("Est Harvestable: " + plot.getEstMatureWeek());
+                System.out.println("Propogated Weeks (Alerts): " + plot.getPunishment());
                 System.out.println("Harvest Status: " + (plot.isHarvestable() ? "Harvestable\n" : "Not Harvestable\n"));
             }
         }
@@ -149,7 +170,7 @@ public class FarmManager {
             for (Plot plot : filteredPlotsList) {
                 System.out.println("PlotID:" + plot.getId());
                 System.out.println("Crops.Crop:" + plot.getCrop().getName());
-                System.out.println("Growth Stage:" + plot.getGrowthStage(week));
+                System.out.println("Growth Stage:" + plot.getGrowthStage());
                 System.out.println("Est Seedling: " + plot.getEstSeedlingWeek());
                 System.out.println("Est Harvestable: " + plot.getEstMatureWeek() + "\n");
                 plotIds.add(plot.getId());

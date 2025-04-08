@@ -81,7 +81,9 @@ public abstract class Plot {
         return false;
     }
 
-    public String getGrowthStage(int currentWeek) {
+    public String getGrowthStage() {
+    	int currentWeek = (new Time()).getCurrentWeek();
+    	
         if (currentWeek < getEstSeedlingWeek()) {
             return "Seed";
         } else if (currentWeek < getEstMatureWeek()) {
@@ -89,6 +91,13 @@ public abstract class Plot {
         } else {
             return "Mature - Ready to harvest";
         }
+    }
+
+    public void updatePunishment() {
+        // Assumption -> The from day 1 to day n of fastforward, all days are alerts.
+        Time time = new Time();
+        int punishmentIncrement = time.getCurrentWeek() - time.getPriorFFWeek(); // Last randomized day
+        this.punishment += punishmentIncrement;
     }
 
     public static int getNumOfPlots() {
