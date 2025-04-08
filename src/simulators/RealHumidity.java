@@ -1,7 +1,7 @@
 package simulators;
 
-import common.Time;
-import sensors.HumiditySensor;
+import common.*;
+import sensors.*;
 
 import java.util.Random;
 
