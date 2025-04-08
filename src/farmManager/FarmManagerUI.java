@@ -249,8 +249,8 @@ public class FarmManagerUI {
 		
 		while(!isComplete) {
 			try {
-	    		System.out.println("Select plot statuses to view:\n"
-	    				+ "1. Crops.Crop Statuses\n"
+	    		System.out.println("Select view type:\n"
+	    				+ "1. Crops Statuses\n"
 	    				+ "2. Condition Statuses\n"
 	    				+ "3. Back to main menu");
 	    		

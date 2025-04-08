@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 
 public class FarmManager {
     // List to store Plots.Plot objects.
-    private ArrayList<Plot> plotList;
+    private HashMap<Integer, Plot> plotMap;
     private ArrayList<Crop> cropsList;
 
     // Constructor initializes the plot list.
     public FarmManager() {
-        plotList = new ArrayList<>();
+        plotMap = new HashMap<>();
         initCrops();
     }
 
@@ -32,16 +32,11 @@ public class FarmManager {
     }
 
     public List<Integer> getPlotIds() {
-        return plotList.stream().map(Plot::getId).collect(Collectors.toList());
+        return new ArrayList<>(plotMap.keySet());
     }
 
     public Plot getPlotById(int id) {
-        for (Plot p : plotList) {
-            if (p.getId() == id) {
-                return p;
-            }
-        }
-        return null;
+        return plotMap.get(id);
     }
     
     public <T extends Crop> ArrayList<? extends Crop> getCropListByType(Class<T> cropType) {
@@ -52,7 +47,7 @@ public class FarmManager {
     }
     
     public boolean hasAlerts() {
-    	for (Plot p : plotList) {
+    	for (Plot p : plotMap.values()) {
             if (!p.raiseAlert().isEmpty()) {
                 return true;
             }
@@ -64,11 +59,11 @@ public class FarmManager {
     public void displayAllPlotsCrops() {
     	int week = (new Time()).getCurrentWeek();
     	
-        if (plotList.isEmpty())
+        if (plotMap.isEmpty())
             System.out.println("\nThere are currently 0 plots, please create some plots through <Manage> Menu.");
         else {
-            System.out.println("There are currently " + plotList.size() + " plots.");
-            for (Plot plot : plotList) {
+            System.out.println("There are currently " + plotMap.size() + " plots.");
+            for (Plot plot : plotMap.values()) {
                 System.out.println("PlotID: " + plot.getId());
                 System.out.println("Crops.Crop: " + plot.getCrop().getName());
                 System.out.println("Growth Stage: " + plot.getGrowthStage(week));
@@ -81,12 +76,12 @@ public class FarmManager {
 
     public void displayAllPlotsConditions() {
         // displayAllPlotsCrops but for plot conditions, and if any alerts.
-        if (plotList.isEmpty()) {
+        if (plotMap.isEmpty()) {
             System.out.println("There are currently 0 plots, please create some plots through the Manage Menu.");
             return;
         }
 
-        for (Plot plot : plotList) {
+        for (Plot plot : plotMap.values()) {
             System.out.println("PlotID:" + plot.getId());
 
                 for(HashMap.Entry<ConditionType, Integer> entry : plot.getCurrentConditions().entrySet()) {
@@ -105,12 +100,12 @@ public class FarmManager {
         ArrayList<Integer> alertPlotIds = new ArrayList<Integer>();
         int count = 0;
         
-        if (plotList.isEmpty()) {
+        if (plotMap.isEmpty()) {
             System.out.println("There are currently 0 plots, please create some plots through the Manage Menu.");
             return null;
         }
 
-        for(Plot plot : plotList) {
+        for(Plot plot : plotMap.values()) {
             HashMap<ConditionType, Integer> plotAlerts = plot.raiseAlert();
             if(plotAlerts != null) {
                 System.out.println("Alert " + ++count + ":");
@@ -135,12 +130,12 @@ public class FarmManager {
 
     public ArrayList<Integer> displayAllHarvestable() {
         ArrayList<Integer> plotIds = new ArrayList<Integer>();
-        List<Plot> filteredPlotsList = plotList.stream().filter(plot -> plot.isHarvestable()).toList();
+        List<Plot> filteredPlotsList = plotMap.values().stream().filter(plot -> plot.isHarvestable()).toList();
         
         int week = (new Time()).getCurrentWeek();
         
 
-        if (plotList.isEmpty()) {
+        if (plotMap.isEmpty()) {
             System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");
             return null;
         } else if (filteredPlotsList.isEmpty()) {
@@ -169,28 +164,21 @@ public class FarmManager {
 
     public void createPlot(LandCrop crop, int plantedWeek) {
         LandPlot plot = new LandPlot(crop, plantedWeek);
-        plotList.add(plot);
+        plotMap.put(plot.getId(), plot);
         System.out.println("Land Plots.Plot planted with " + crop.getName() + " is created!");
    }
    
    public void createPlot(AquaticCrop crop, int plantedWeek) {
     	AquaticPlot plot = new AquaticPlot(crop, plantedWeek);
-        plotList.add(plot);
+        plotMap.put(plot.getId(), plot);
         System.out.println("Aquatic Plots.Plot planted with " + crop.getName() + " is created!");
    }
 
     public boolean harvestPlot(int plotId){
-        Iterator<Plot> iterator = plotList.iterator();
-
-        while (iterator.hasNext()) {
-            Plot p = iterator.next();
-
-            if (p.getId() == plotId) {
-                iterator.remove();
-                return true;
-            }
+        if (plotMap.containsKey(plotId)) {
+            plotMap.remove(plotId);
+            return true;
         }
-
         return false;
     }
 
