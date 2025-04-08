@@ -56,7 +56,7 @@ public abstract class Plot {
         }
     }
 
-    public HashMap<ConditionType, Integer> raiseAlert() throws KeyException {
+    public HashMap<ConditionType, Integer> raiseAlert(){
         HashMap<ConditionType, Integer> currentConditions = getCurrentConditions();
         HashMap<ConditionType, Integer[]> requiredConditions = crop.getConditions();
         HashMap<ConditionType, Integer> alerts = new HashMap<>();
@@ -70,9 +70,6 @@ public abstract class Plot {
                 if (currentValue < range[0] || currentValue > range[1]) {
                     alerts.put(conditionType, currentValue);
                 }
-            }
-            else {
-                throw new KeyException("Plots.Plot does not have " + conditionType.name().toLowerCase() + " sensor");
             }
         }
         return alerts;

@@ -9,7 +9,7 @@ public class Crop {
     private String name;
     private int seedlingWeeks;
     private int matureWeeks;
-    private HashMap <ConditionType, int[]> conditions;
+    private HashMap <ConditionType, Integer[]> conditions;
     private List<ConditionType> conditionType;
 
     public Crop(String name, int seedlingWeeks, int matureWeeks) {
@@ -54,11 +54,11 @@ public class Crop {
         this.name = name;
     }
 
-    public HashMap<ConditionType, int[]> getConditions() {
+    public HashMap<ConditionType, Integer[]> getConditions() {
         return conditions;
     }
 
-    public void setConditions(HashMap<ConditionType, int[]> conditions) {
+    public void setConditions(HashMap<ConditionType, Integer[]> conditions) {
         this.conditions = conditions;
     }
 

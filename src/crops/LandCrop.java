@@ -6,11 +6,11 @@ import java.util.List;
 
 public class LandCrop extends Crop {
 
-    public LandCrop(String name, int seedlingWeeks, int matureWeeks,  int[] temperature, int[] humidity, int[] lightExposure, int[] soilMoisture) {
+    public LandCrop(String name, int seedlingWeeks, int matureWeeks,  Integer[] temperature, Integer[] humidity, Integer[] lightExposure, Integer[] soilMoisture) {
         super(name, seedlingWeeks, matureWeeks);
 
         // get the hash map
-        HashMap<ConditionType, int[]> conditions = this.getConditions();
+        HashMap<ConditionType, Integer[]> conditions = this.getConditions();
 
         // set conditions
         List<ConditionType> landConditions = getConditionType();
