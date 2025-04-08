@@ -104,11 +104,11 @@ public abstract class Plot {
     }
 
     public int getEstSeedlingWeek() {
-        return estSeedlingWeek;
+        return estSeedlingWeek + punishment;
     }
 
     public int getEstMatureWeek() {
-        return estMatureWeek;
+        return estMatureWeek + punishment;
     }
 
     public int getPlantedWeek() {

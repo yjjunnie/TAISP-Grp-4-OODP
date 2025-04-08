@@ -26,6 +26,7 @@ public class CropReader {
             reader =  new BufferedReader(new FileReader(this.filePath));
 
             String line;
+            reader.readLine(); // Clear Header
 
             while ((line = reader.readLine()) != null) {
                 List<String> items = Arrays.asList(line.split(","));
