@@ -178,6 +178,7 @@ public class FarmManager {
 
     public boolean harvestPlot(int plotId){
         if (plotMap.containsKey(plotId)) {
+            System.out.println("Successfully harvested "+plotMap.get(plotId).getCrop().getName()+" from plot "+plotId+"!\n");
             plotMap.remove(plotId);
             return true;
         }
