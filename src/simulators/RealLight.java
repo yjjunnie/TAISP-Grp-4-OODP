@@ -10,7 +10,6 @@ public class RealLight implements Simulator {
     private LightSensor lightSensor;
     private Random random = new Random();
     private int healthy_min, healthy_max;
-    
     // Constructor 
     public RealLight(LightSensor lightSensor) {
 
