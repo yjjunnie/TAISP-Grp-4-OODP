@@ -5,7 +5,6 @@ import crops.Crop;
 import crops.LandCrop;
 import common.Time;
 
-import java.security.KeyException;
 import java.util.*;
 
 public class FarmManagerUI {
@@ -189,9 +188,6 @@ public class FarmManagerUI {
 					continue;
 				}
 
-			}catch(KeyException e) {
-				System.out.println("ERROR! Unexpected KeyError has occurred!");
-				return;
 			}catch(InputMismatchException e) {
 				System.out.println("ERROR! Invalid selection, please try again!");
 				io.nextLine(); // Clearing buffer only when error 
@@ -232,9 +228,6 @@ public class FarmManagerUI {
 					continue;
 				}
 				
-			}catch(KeyException e) {
-				System.out.println("ERROR! Unexpected KeyError has occurred!");
-				return;
 			}catch(InputMismatchException e) {
 				System.out.println("ERROR! Invalid selection, please try again!");
 				io.nextLine(); // Clearing buffer only when error 
@@ -319,10 +312,7 @@ public class FarmManagerUI {
         		fastForward(userInput);
         		isComplete = true;
         		
-    		}catch(KeyException e) {
-				System.out.println("ERROR! Unexpected KeyError has occurred!");
-				return;
-			}catch(InputMismatchException e) {
+    		}catch(InputMismatchException e) {
 				System.out.println("ERROR! Invalid selection, please try again!");
 	    		io.nextLine(); // Clearing buffer only when error 
 			}catch(NumberFormatException e) {

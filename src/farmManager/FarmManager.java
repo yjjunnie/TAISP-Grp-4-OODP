@@ -10,7 +10,6 @@ import plots.AquaticPlot;
 import plots.LandPlot;
 import plots.Plot;
 
-import java.security.KeyException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,7 +51,7 @@ public class FarmManager {
                 .collect(Collectors.toList());
     }
     
-    public boolean hasAlerts() throws KeyException {
+    public boolean hasAlerts() {
     	for (Plot p : plotList) {
             if (!p.raiseAlert().isEmpty()) {
                 return true;
@@ -80,7 +79,7 @@ public class FarmManager {
         }
     }
 
-    public void displayAllPlotsConditions() throws KeyException {
+    public void displayAllPlotsConditions() {
         // displayAllPlotsCrops but for plot conditions, and if any alerts.
         if (plotList.isEmpty()) {
             System.out.println("There are currently 0 plots, please create some plots through the Manage Menu.");
@@ -101,7 +100,7 @@ public class FarmManager {
 
     }
 
-    public ArrayList<Integer> displayAllAlertPlots() throws KeyException {
+    public ArrayList<Integer> displayAllAlertPlots() {
         boolean hasAlert = false;
         ArrayList<Integer> alertPlotIds = new ArrayList<Integer>();
         int count = 0;

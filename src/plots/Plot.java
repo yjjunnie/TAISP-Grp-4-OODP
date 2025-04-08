@@ -5,7 +5,6 @@ import common.Time;
 import crops.Crop;
 import sensors.Sensor;
 
-import java.security.KeyException;
 import java.util.*;
 
 public abstract class Plot {
