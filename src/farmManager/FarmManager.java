@@ -184,8 +184,7 @@ public class FarmManager {
         return false;
     }
 
-    public void editPlotConditions(int plotId) {
-        Scanner io = new Scanner(System.in);
+    public void editPlotConditions(Scanner io, int plotId) {
         Plot plot = getPlotById(plotId);
         HashMap<ConditionType, Integer[]> cropConditionList = plot.getCrop().getConditions();
         boolean isComplete = false;
@@ -229,6 +228,5 @@ public class FarmManager {
 		}
 
         System.out.println("Success! Plot conditions have been updated.");
-        io.close();
     }
 }

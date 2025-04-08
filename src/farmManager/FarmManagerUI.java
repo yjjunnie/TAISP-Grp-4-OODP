@@ -181,7 +181,7 @@ public class FarmManagerUI {
 
 				if(selection == -1) return;
 				else if(plotIds.contains(selection)) {
-					farmManager.editPlotConditions(selection);
+					farmManager.editPlotConditions(io, selection);
 					isComplete = true;
 				} else {
 					System.out.println("ERROR! Invalid selection, please try again!");
@@ -221,7 +221,7 @@ public class FarmManagerUI {
 				if (selection == -1) {
 					return;
 				}else if (alertIds.contains(selection)) {
-					farmManager.editPlotConditions(selection);
+					farmManager.editPlotConditions(io, selection);
 					isComplete = true;
 				}else {
 					System.out.println("ERROR! Invalid selection, please try again!");
