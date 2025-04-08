@@ -1,9 +1,15 @@
+package farmManager;
+
+import crops.AquaticCrop;
+import crops.Crop;
+import crops.LandCrop;
+import common.Time;
+
 import java.security.KeyException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class FarmManagerUI {
-    private FarmManager farmManager; // CLIMenu passes UI handling to FarmManagerUI.
+    private FarmManager farmManager; // menu.CLIMenu passes UI handling to farmManager.FarmManagerUI.
     private Scanner io;
     private Time time;
 
@@ -56,7 +62,7 @@ public class FarmManagerUI {
     		List<? extends Crop> filteredCropsList;
         	int index = 0;
     		try {
-        		System.out.println("Plot Creation.\n"
+        		System.out.println("Plots.Plot Creation.\n"
         				+ "Select plot type:\n"
         				+ "1. Soil\n"
         				+ "2. Aquatic");
@@ -136,7 +142,7 @@ public class FarmManagerUI {
 					boolean deleted = farmManager.harvestPlot(selection);
 					
 					if(!deleted){
-						System.out.println("ERROR! Unexpected error has occured, Plot with id "+selection+" was not found, please try again!");
+						System.out.println("ERROR! Unexpected error has occured, Plots.Plot with id "+selection+" was not found, please try again!");
 						continue;
 					}
 
@@ -251,7 +257,7 @@ public class FarmManagerUI {
 		while(!isComplete) {
 			try {
 	    		System.out.println("Select plot statuses to view:\n"
-	    				+ "1. Crop Statuses\n"
+	    				+ "1. Crops.Crop Statuses\n"
 	    				+ "2. Condition Statuses\n"
 	    				+ "3. Back to main menu");
 	    		

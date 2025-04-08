@@ -1,3 +1,5 @@
+package common;
+
 public enum ConditionType {
     HUMIDITY("humidity"),
     TEMPERATURE("temperature"),

@@ -1,10 +1,15 @@
+package plots;
+
+import crops.Crop;
+import sensors.Sensor;
+
 import java.util.ArrayList;
 
-class AquaticPlot extends Plot {
+public class LandPlot extends Plot {
     private ArrayList<Sensor> sensors;
 
-    public AquaticPlot(Crop crop, int plantedDay) {
-        super(crop, plantedDay);
+    public LandPlot(Crop crop, int plantedWeek) {
+        super(crop, plantedWeek);
     }
 
     @Override
@@ -13,5 +18,6 @@ class AquaticPlot extends Plot {
 //        sensors.add(new LightSensor());
 //        sensors.add(new TemperatureSensor());
 //        sensors.add(new HumiditySensor());
+//        sensors.add(new MoistureSensor());
     }
 }

@@ -1,3 +1,8 @@
+package simulators;
+
+import common.Time;
+import sensors.HumiditySensor;
+
 import java.util.Random;
 
 class RealHumidity extends Simulator { 

@@ -1,4 +1,10 @@
-class LightSensor extends Sensor {
+package sensors;
+
+import common.Time;
+import crops.Crop;
+import simulators.RealLight;
+
+public class LightSensor extends Sensor {
     final int created_day;
     private RealLight realLight;
 
@@ -12,7 +18,7 @@ class LightSensor extends Sensor {
     }
 
     // Constructor 
-    public LightSensor(Crop crop) { 
+    public LightSensor(Crop crop) {
         created_day = (new Time()).getCurrentWeek();
         conditionType = "Light Intensity"; 
         condition = 25; //NEED LOGIC to be within specific crop's condition range, when first created will be in optimal condition cuz created with plot 

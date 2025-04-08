@@ -1,3 +1,8 @@
+package simulators;
+
+import common.Time;
+import sensors.MoistureSensor;
+
 import java.util.Random;
 
 class RealMoisture implements Simulator {

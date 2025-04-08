@@ -1,3 +1,5 @@
+package sensors;
+
 abstract class Sensor {
     protected ConditionType conditionType;
 

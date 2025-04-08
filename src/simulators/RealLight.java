@@ -1,6 +1,11 @@
+package simulators;
+
+import common.Time;
+import sensors.LightSensor;
+
 import java.util.Random;
 
-class RealLight implements Simulator {
+public class RealLight implements Simulator {
     int day_diff = (new Time()).getCurrentWeek() - dayLastCleared; //use for randomiser ??
     private LightSensor lightSensor;
     private Random random = new Random();

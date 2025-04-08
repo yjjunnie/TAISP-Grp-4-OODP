@@ -1,4 +1,10 @@
-class HumiditySensor extends Sensor {
+package sensors;
+
+import common.Time;
+import crops.Crop;
+import simulators.RealHumidity;
+
+public class HumiditySensor extends Sensor {
     private RealHumidity realHumidity;
 
     // Constructor 
