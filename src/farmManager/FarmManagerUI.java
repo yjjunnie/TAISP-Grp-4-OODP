@@ -61,7 +61,7 @@ public class FarmManagerUI {
     		List<? extends Crop> filteredCropsList;
         	int index = 0;
     		try {
-        		System.out.println("Plots.Plot Creation.\n"
+        		System.out.println("Plots Creation.\n"
         				+ "Select plot type:\n"
         				+ "1. Soil\n"
         				+ "2. Aquatic");
@@ -306,7 +306,7 @@ public class FarmManagerUI {
     			
         		System.out.println("Enter the amount of weeks you wish to fast forward by.");
         		
-        		System.out.print(">: ");
+        		System.out.print("> ");
         		userInput = io.nextInt();
         		
         		fastForward(userInput);

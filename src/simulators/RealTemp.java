@@ -1,44 +1,21 @@
 package simulators;
 
-import common.Time;
-import sensors.TemperatureSensor;
+import common.ConditionType;
 
-import java.util.Random;
-
-public class RealTemp implements Simulator {
-    int day_diff = (new Time()).getCurrentWeek() - dayLastCleared; //use for randomiser ??
-    private TemperatureSensor temperatureSensor;
-    private Random random = new Random();
-
-    // Bidirectional association
-    public void setTemperatureSensor(TemperatureSensor temperatureSensor) {
-        this.temperatureSensor = temperatureSensor;
-    }
-    public TemperatureSensor getTemperatureSensor() {
-        return temperatureSensor;
-    }
+public class RealTemp extends Simulator {
+    
+    private int healthy_min, healthy_max;
 
     // Constructor 
-    public RealTemp(TemperatureSensor temperatureSensor) {
-
+    public RealTemp(Integer[] desiredRange) {
+        this.healthy_min = desiredRange[0];
+        this.healthy_max = desiredRange[1];
+        setCustomCondition((healthy_min + healthy_max) / 2);
     }
 
-    @Override
-    public int getCondition() {
-        return temperatureSensor.getCondition();
-    }
-
-    @Override
-    public void setCondition(String condition) {
-        double probability = Simulator.probability(temperatureSensor.getConditionType());
-        temperatureSensor.condition = randomizer(probability);
-    }
-
-    @Override
-    public int randomizer(double prob) {
-        int min = 0, max = 100;
-        int randomizedValue = getRandomInt(min, max) * day_diff;
-        return (int) Math.round(randomizedValue * prob);
+    public void randomizeCondition() {
+        int newCondition = randomizer(ConditionType.TEMPERATURE, healthy_min, healthy_max);
+        setRandomisedCondition(newCondition);
     }
 
 

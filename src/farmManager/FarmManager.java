@@ -91,6 +91,7 @@ public class FarmManager {
             if (!plot.raiseAlert().isEmpty()) {
                 System.out.println("ALERT: One or more conditions are out of the acceptable range!");
             }
+            System.out.println(""); // Formatting for next line
         }
 
     }
@@ -114,6 +115,7 @@ public class FarmManager {
                 for(HashMap.Entry<ConditionType, Integer> entry : plotAlerts.entrySet()) {
                     System.out.println(entry.getKey().toString() +": " + entry.getValue());
                 }
+                System.out.println(""); // Formatting next line
                 
                 alertPlotIds.add(plot.getId());
                 hasAlert = true;
@@ -149,7 +151,7 @@ public class FarmManager {
                 System.out.println("Crops.Crop:" + plot.getCrop().getName());
                 System.out.println("Growth Stage:" + plot.getGrowthStage(week));
                 System.out.println("Est Seedling: " + plot.getEstSeedlingWeek());
-                System.out.println("Est Harvestable: " + plot.getEstMatureWeek());
+                System.out.println("Est Harvestable: " + plot.getEstMatureWeek() + "\n");
                 plotIds.add(plot.getId());
             }
             return plotIds;
@@ -165,13 +167,13 @@ public class FarmManager {
     public void createPlot(LandCrop crop, int plantedWeek) {
         LandPlot plot = new LandPlot(crop, plantedWeek);
         plotMap.put(plot.getId(), plot);
-        System.out.println("Land Plots.Plot planted with " + crop.getName() + " is created!");
+        System.out.println("Land Plots planted with " + crop.getName() + " is created!");
    }
    
    public void createPlot(AquaticCrop crop, int plantedWeek) {
     	AquaticPlot plot = new AquaticPlot(crop, plantedWeek);
         plotMap.put(plot.getId(), plot);
-        System.out.println("Aquatic Plots.Plot planted with " + crop.getName() + " is created!");
+        System.out.println("Aquatic Plots planted with " + crop.getName() + " is created!");
    }
 
     public boolean harvestPlot(int plotId){
@@ -212,6 +214,8 @@ public class FarmManager {
                         
                     }
                 }
+                
+                isComplete = true;
 			}catch(InputMismatchException e) {
 				System.out.println("ERROR! Invalid input, please try again!");
 				io.nextLine(); // Clearing buffer only when error 
@@ -225,5 +229,6 @@ public class FarmManager {
 		}
 
         System.out.println("Success! Plots.Plot conditions have been updated.");
+        io.close();
     }
 }

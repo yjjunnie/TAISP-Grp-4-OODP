@@ -17,7 +17,7 @@ public abstract class Plot {
     private int estSeedlingWeek;
     private int estMatureWeek;
     private int plantedWeek;
-    private ArrayList<Sensor> sensors = new ArrayList<Sensor>();
+    private ArrayList<? extends Sensor> sensors = new ArrayList<>();
     private int punishment = 0;
 
 
@@ -48,7 +48,7 @@ public abstract class Plot {
 
     // Replacing clearAlert() with setConditions()
     public void setConditions(ConditionType conditionType, int condition) {
-        for (Sensor sensor : sensors) {
+    	for (Sensor sensor : sensors) {
             if (conditionType == sensor.getConditionType()) {
                 sensor.setCondition(condition);
             }
@@ -116,7 +116,7 @@ public abstract class Plot {
     }
 
     public ArrayList<Sensor> getSensors() {
-        return sensors;
+        return (ArrayList<Sensor>) sensors;
     }
 
     public int getPunishment() {

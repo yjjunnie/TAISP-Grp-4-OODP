@@ -1,36 +1,28 @@
 package sensors;
 
+import common.ConditionType;
 import common.Time;
-import crops.Crop;
 import simulators.RealMoisture;
 
 public class MoistureSensor extends Sensor {
-    final int created_day;
     private RealMoisture realMoisture;
 
-    // Bidirectional association 
-    public void setRealMoisture(RealMoisture realMoisture) {
-        this.realMoisture = realMoisture;
-        realMoisture.setMoistureSensor(this);
-    }
-    public RealMoisture getRealMoisture() {
-        return realMoisture;
-    }
-
     // Constructor 
-    public MoistureSensor(Crop crop) {
-        created_day = (new Time()).getCurrentWeek();
-        conditionType = "Moisture Level"; 
-        condition = 25; //NEED LOGIC to be within specific crop's condition range, when first created will be in optimal condition cuz created with plot 
+    public MoistureSensor(Integer range[]) {
+        setConditionType(ConditionType.MOISTURE); // Abstract Sensor
+        realMoisture = new RealMoisture(range);
     }
 
-
-    @Override
-    public int getCondition() { // Used to get condition after moisture sensor is created 
-        if ((new Time()).getCurrentWeek() - created_day == 0) //checking conditions on day of creation 
-            return condition;
+    public int getCondition() { // Used to get condition after humidity sensor is created 
+        if ((new Time()).getCurrentWeek() - realMoisture.getWeekLastRandomised() == 0) //checking conditions on day of creation 
+            return realMoisture.getCondition();
         else {
-            realMoisture.setCondition("Moisture Level");
+            realMoisture.randomizeCondition();
+            return realMoisture.getCondition();
         }
+    }
+
+    public void setCondition(int value) { // Used to set condition, when farmer updates value
+        realMoisture.setCustomCondition(value);
     }
 }
