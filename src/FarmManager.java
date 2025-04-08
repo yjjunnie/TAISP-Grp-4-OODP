@@ -10,20 +10,14 @@ public class FarmManager {
     // Constructor initializes the plot list.
     public FarmManager() {
         plotList = new ArrayList<>();
-        this.cropsList = new ArrayList<Crop>();
         initCrops();
     }
 
     
     public void initCrops() {
-    	// Enhancement with CVS reading int[] temperature, int[] humidity, int[] lightExposure, int[] soilMoisture
-    	int[] temp = {25, 35};
-		cropsList.add(new LandCrop("Wheat", 20, 30, temp, temp, temp, temp));
-		cropsList.add(new LandCrop("Corn", 20, 40, temp, temp, temp, temp));
-		cropsList.add(new LandCrop("Tomatoes", 15, 10, temp, temp, temp, temp));
-		cropsList.add(new AquaticCrop("Lettuce", 20, 30, temp, temp, temp));
-		cropsList.add(new AquaticCrop("Spinach", 20, 40, temp, temp, temp));
-		cropsList.add(new AquaticCrop("Peppers", 15, 10, temp, temp, temp));
+    	// Enhancement with CVS Reading
+    	CropReader reader = new CropReader("./src/cropData.csv");
+        this.cropsList = (ArrayList<Crop>) reader.getCropsList();
     }
 
     public List<Integer> getPlotIds() {
@@ -56,7 +50,9 @@ public class FarmManager {
     }
 
 
-    public void displayAllPlotsCrops(int week) {
+    public void displayAllPlotsCrops() {
+    	int week = (new Time()).getCurrentWeek();
+    	
         if (plotList.isEmpty())
             System.out.println("\nThere are currently 0 plots, please create some plots through <Manage> Menu.");
         else {
@@ -65,12 +61,14 @@ public class FarmManager {
                 System.out.println("PlotID: " + plot.getId());
                 System.out.println("Crop: " + plot.getCrop().getName());
                 System.out.println("Growth Stage: " + plot.getGrowthStage(week));
+                System.out.println("Est Seedling: " + plot.getEstSeedlingWeek());
+                System.out.println("Est Harvestable: " + plot.getEstMatureWeek());
                 System.out.println("Harvest Status: " + (plot.isHarvestable() ? "Harvestable\n" : "Not Harvestable\n"));
             }
         }
     }
 
-    public void displayAllPlotsConditions(int week) throws KeyException {
+    public void displayAllPlotsConditions() throws KeyException {
         // displayAllPlotsCrops but for plot conditions, and if any alerts.
         if (plotList.isEmpty()) {
             System.out.println("There are currently 0 plots, please create some plots through the Manage Menu.");
@@ -124,9 +122,12 @@ public class FarmManager {
         }
     }
 
-    public ArrayList<Integer> displayAllHarvestable(int week) {
+    public ArrayList<Integer> displayAllHarvestable() {
         ArrayList<Integer> plotIds = new ArrayList<Integer>();
         List<Plot> filteredPlotsList = plotList.stream().filter(plot -> plot.isHarvestable()).toList();
+        
+        int week = (new Time()).getCurrentWeek();
+        
 
         if (plotList.isEmpty()) {
             System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");
@@ -141,6 +142,8 @@ public class FarmManager {
                 System.out.println("PlotID:" + plot.getId());
                 System.out.println("Crop:" + plot.getCrop().getName());
                 System.out.println("Growth Stage:" + plot.getGrowthStage(week));
+                System.out.println("Est Seedling: " + plot.getEstSeedlingWeek());
+                System.out.println("Est Harvestable: " + plot.getEstMatureWeek());
                 plotIds.add(plot.getId());
             }
             return plotIds;
@@ -225,5 +228,3 @@ public class FarmManager {
         System.out.println("Success! Plot conditions have been updated.");
     }
 }
-
-

@@ -13,7 +13,7 @@ public class FarmManagerUI {
         this.io = new Scanner(System.in);
     }
     
-    public void manageMenu(int week) {
+    public void manageMenu() {
     	Boolean isComplete = false;
 		int selection;
 		
@@ -28,8 +28,8 @@ public class FarmManagerUI {
 	    		selection = io.nextInt();
 	    		
 	    		switch(selection) {
-	    			case 1 -> createPlotMenu(week);
-	    			case 2 -> harvestPlotMenu(week);
+	    			case 1 -> createPlotMenu();
+	    			case 2 -> harvestPlotMenu();
 	    			case 3 -> isComplete = true;
 	    			default -> System.out.println("ERROR! Invalid selection, please try again!");
 	    		}
@@ -47,9 +47,10 @@ public class FarmManagerUI {
 		}
     }
     
-    public void createPlotMenu(int week) {
+    public void createPlotMenu() {
     	boolean isComplete = false;
     	int selection;
+    	int week = (new Time()).getCurrentWeek();
 
     	while(!isComplete) {
     		List<? extends Crop> filteredCropsList;
@@ -115,13 +116,13 @@ public class FarmManagerUI {
     	}
     }
     
-    public void harvestPlotMenu(int week) {
+    public void harvestPlotMenu() {
     	boolean isComplete = false;
     	int selection;
 
 		while(!isComplete) {
 			try{
-				ArrayList<Integer> plotIds = farmManager.displayAllHarvestable(week);
+				ArrayList<Integer> plotIds = farmManager.displayAllHarvestable();
 				if(plotIds == null) return; // No plots created
 				if(plotIds.size() == 0) return; // No harvestable crops
 
@@ -158,13 +159,13 @@ public class FarmManagerUI {
 		}
     }
     
-    public void updateMenu(int week) {
+    public void updateMenu() {
     	boolean isComplete = false;
     	int selection;
 
 		while(!isComplete) {
 			try{
-				farmManager.displayAllPlotsConditions(week);
+				farmManager.displayAllPlotsConditions();
 				List<Integer> plotIds = farmManager.getPlotIds();
 				
 				if(plotIds == null || plotIds.isEmpty()) return; // No plots created
@@ -243,7 +244,7 @@ public class FarmManagerUI {
 
 
 
-	public void viewMenu(int week) {
+	public void viewMenu() {
     	Boolean isComplete = false;
 		int selection;
 		
@@ -258,8 +259,8 @@ public class FarmManagerUI {
 	    		selection = io.nextInt();
 	    		
 	    		switch(selection) {
-	    			case 1 -> farmManager.displayAllPlotsCrops(week);
-	    			case 2 -> farmManager.displayAllPlotsConditions(week);
+	    			case 1 -> farmManager.displayAllPlotsCrops();
+	    			case 2 -> farmManager.displayAllPlotsConditions();
 	    			case 3 -> isComplete = true;
 	    			default -> System.out.println("ERROR! Invalid selection, please try again!");
 	    		}
