@@ -108,7 +108,7 @@ public class FarmManager {
 
         for(Plot plot : plotMap.values()) {
             HashMap<ConditionType, Integer> plotAlerts = plot.raiseAlert();
-            if(plotAlerts != null) {
+            if(!plotAlerts.isEmpty()) {
                 System.out.println("Alert " + ++count + ":");
                 System.out.println("PlotID:" + plot.getId());
 
