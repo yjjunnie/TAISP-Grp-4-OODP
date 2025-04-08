@@ -27,9 +27,9 @@ public class CLIMenu {
         		selection = io.nextInt();
         		
         		switch(selection) {
-        			case 1 -> farmManagerUI.viewMenu((new Time()).getCurrentWeek());
-        			case 2 -> farmManagerUI.manageMenu((new Time()).getCurrentWeek());
-        			case 3 -> farmManagerUI.updateMenu((new Time()).getCurrentWeek());
+        			case 1 -> farmManagerUI.viewMenu();
+        			case 2 -> farmManagerUI.manageMenu();
+        			case 3 -> farmManagerUI.updateMenu();
         			case 4 -> farmManagerUI.alertMenu();
         			case 5 -> farmManagerUI.handleFastFoward();
         			case 6 -> isComplete = true;
