@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class LandPlot extends Plot {
     private ArrayList<Sensor> sensors;
 
-    public LandPlot(Crop crop, int plantedDay) {
-        super(crop, plantedDay);
+    public LandPlot(Crop crop, int plantedWeek) {
+        super(crop, plantedWeek);
     }
 
     @Override

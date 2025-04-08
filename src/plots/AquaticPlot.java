@@ -10,8 +10,8 @@ import java.util.HashMap;
 public class AquaticPlot extends Plot {
     private ArrayList<Sensor> sensors;
 
-    public AquaticPlot(Crop crop, int plantedDay) {
-        super(crop, plantedDay);
+    public AquaticPlot(Crop crop, int plantedWeek) {
+        super(crop, plantedWeek);
     }
 
     @Override
