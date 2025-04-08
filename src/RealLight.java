@@ -4,6 +4,7 @@ class RealLight implements Simulator {
     int day_diff = climenu.getCurrentDay() - dayLastCleared; //use for randomiser ??
     private LightSensor lightSensor;
     private Random random = new Random();
+<<<<<<< Updated upstream:src/RealLight.java
 
     // Bidirectional association
     public void setLightSensor(LightSensor lightSensor) {
@@ -12,6 +13,9 @@ class RealLight implements Simulator {
     public LightSensor getLightSensor() {
         return lightSensor;
     }
+=======
+    private int healthy_min, healthy_max;
+>>>>>>> Stashed changes:src/simulators/RealLight.java
 
     // Constructor 
     public RealLight(LightSensor lightSensor) {
