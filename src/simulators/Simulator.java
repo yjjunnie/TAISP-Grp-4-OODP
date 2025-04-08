@@ -1,8 +1,8 @@
 package simulators;
 
-import java.util.Random;
 import common.ConditionType;
 import common.Time;
+import java.util.Random;
 
 public abstract class Simulator {
     protected int WeekLastCleared = 0;

@@ -228,7 +228,7 @@ public class FarmManager {
 			}
 		}
 
-        System.out.println("Success! Plots.Plot conditions have been updated.");
+        System.out.println("Success! Plot conditions have been updated.");
         io.close();
     }
 }
