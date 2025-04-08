@@ -69,16 +69,16 @@ public class CropReader {
                     int seedlingWeeks = Integer.parseInt(dataLine.get(2)) / 7;
                     int matureWeeks = Integer.parseInt(dataLine.get(3)) / 7;
 
-                    int[] temperature = {Integer.parseInt(dataLine.get(4)), Integer.parseInt(dataLine.get(5))};
-                    int[] humidity = {Integer.parseInt(dataLine.get(6)), Integer.parseInt(dataLine.get(7))};
-                    int[] lightExposure = {Integer.parseInt(dataLine.get(8)), Integer.parseInt(dataLine.get(9))};
+                    Integer[] temperature = {Integer.parseInt(dataLine.get(4)), Integer.parseInt(dataLine.get(5))};
+                    Integer[] humidity = {Integer.parseInt(dataLine.get(6)), Integer.parseInt(dataLine.get(7))};
+                    Integer[] lightExposure = {Integer.parseInt(dataLine.get(8)), Integer.parseInt(dataLine.get(9))};
 
                     switch (Type) {
                         case "Aquatic":
                             cropsList.add(new AquaticCrop(name, seedlingWeeks, matureWeeks, temperature, humidity, lightExposure));
                             break;
                         case "Land":
-                            int[] soilMoisture = {Integer.parseInt(dataLine.get(10)), Integer.parseInt(dataLine.get(11))};
+                            Integer[] soilMoisture = {Integer.parseInt(dataLine.get(10)), Integer.parseInt(dataLine.get(11))};
                             cropsList.add(new LandCrop(name, seedlingWeeks, matureWeeks, temperature, humidity, lightExposure, soilMoisture));
                             break;
                         default:

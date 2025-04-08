@@ -198,7 +198,7 @@ public class FarmManager {
     public void editPlotConditions(int plotId) {
         Scanner io = new Scanner(System.in);
         Plot plot = getPlotById(plotId);
-        HashMap<ConditionType, int[]> cropConditionList = plot.getCrop().getConditions();
+        HashMap<ConditionType, Integer[]> cropConditionList = plot.getCrop().getConditions();
         boolean isComplete = false;
 
 		while(!isComplete) {
@@ -207,7 +207,7 @@ public class FarmManager {
                 
                 for(HashMap.Entry<ConditionType, Integer> entry : plot.getCurrentConditions().entrySet()) {
                     Boolean validValue = false;
-                    int[] maxMin = cropConditionList.get(entry.getKey());
+                    Integer[] maxMin = cropConditionList.get(entry.getKey());
                     
                     while(!validValue) {
                         System.out.println(entry.getKey() + " [ Min: " + maxMin[0] + ", Max:" + maxMin[1] + " ]" );
