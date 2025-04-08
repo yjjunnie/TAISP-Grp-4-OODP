@@ -27,7 +27,7 @@ public class FarmManager {
     
     public void initCrops() {
     	// Enhancement with CVS Reading
-    	CropReader reader = new CropReader("./src/cropData.csv");
+    	CropReader reader = new CropReader("./src/crops/cropData.csv");
         this.cropsList = (ArrayList<Crop>) reader.getCropsList();
     }
 
