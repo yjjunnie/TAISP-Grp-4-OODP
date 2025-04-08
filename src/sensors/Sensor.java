@@ -1,22 +1,18 @@
 package sensors;
 
-public abstract class Sensor {
-    protected String conditionType;
-    protected int condition;
+abstract class Sensor {
+    protected ConditionType conditionType;
 
-    public String getConditionType() {
+    public ConditionType getConditionType() {
         return conditionType;
     }
 
-    public int getCondition() {
-        return condition;
-    }
+    public abstract int getCondition();
 
-    public void setConditionType(String conditionType) {
+    public void setConditionType(ConditionType conditionType) {
         this.conditionType = conditionType;
     }
 
-    public void setCondition(int condition) {
-        this.condition = condition;
-    }
+    public abstract void setCondition(int condition);
+       
 }
