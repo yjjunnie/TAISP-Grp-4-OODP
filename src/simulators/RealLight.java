@@ -6,18 +6,11 @@ import sensors.LightSensor;
 import java.util.Random;
 
 public class RealLight implements Simulator {
-    int day_diff = (new Time()).getCurrentWeek() - dayLastCleared; //use for randomiser ??
+    int day_diff = (new Time()).getCurrentWeek() - WeekLastCleared; //use for randomiser ??
     private LightSensor lightSensor;
     private Random random = new Random();
-
-    // Bidirectional association
-    public void setLightSensor(LightSensor lightSensor) {
-        this.lightSensor = lightSensor;
-    }
-    public LightSensor getLightSensor() {
-        return lightSensor;
-    }
-
+    private int healthy_min, healthy_max;
+    
     // Constructor 
     public RealLight(LightSensor lightSensor) {
 

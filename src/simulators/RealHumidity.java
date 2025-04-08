@@ -21,7 +21,7 @@ class RealHumidity extends Simulator {
     // @Override
     public int randomizer() {
         int min = 10, max = 90;
-        int changeRange[] = change_range(ConditionType.HUMIDITY);
+        int[] changeRange = change_range(ConditionType.HUMIDITY);
         int change;
         int currentCondition = humiditySensor.getCondition();
         int newCondition = currentCondition;
@@ -32,7 +32,7 @@ class RealHumidity extends Simulator {
         }
         else if (currentCondition < healthy_min) {
             change = random.nextInt(-1 - changeRange[0] + 1) + changeRange[0]; // choose between -1 and min change 
-            newCondition = currentCondition + change - Week_diff; // worsen condition based on week_diff 
+            newCondition = currentCondition + change * Week_diff; // worsen condition based on week_diff
             if (newCondition == min)
                 return newCondition;
             while (newCondition < min) {
