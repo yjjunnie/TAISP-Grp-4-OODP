@@ -5,7 +5,6 @@ import crops.Crop;
 import crops.CropReader;
 import crops.LandCrop;
 import common.ConditionType;
-import common.Time;
 import plots.AquaticPlot;
 import plots.LandPlot;
 import plots.Plot;
@@ -76,9 +75,7 @@ public class FarmManager {
     };
 
 
-    public void displayAllPlotsCrops() {
-    	int week = (new Time()).getCurrentWeek();
-    	
+    public void displayAllPlotsCrops() {    	
         if (plotMap.isEmpty())
             System.out.println("\nThere are currently 0 plots, please create some plots through <Manage> Menu.");
         else {
@@ -155,9 +152,6 @@ public class FarmManager {
         ArrayList<Integer> plotIds = new ArrayList<Integer>();
         List<Plot> filteredPlotsList = plotMap.values().stream().filter(plot -> plot.isHarvestable()).toList();
         
-        int week = (new Time()).getCurrentWeek();
-        
-
         if (plotMap.isEmpty()) {
             System.out.println("There are currently 0 plots, please create some plots through <Manage> Menu.");
             return null;
