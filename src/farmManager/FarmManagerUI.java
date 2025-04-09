@@ -141,7 +141,7 @@ public class FarmManagerUI {
 					boolean deleted = farmManager.harvestPlot(selection);
 					
 					if(!deleted){
-						System.out.println("ERROR! Unexpected error has occured, Plots.Plot with id "+selection+" was not found, please try again!");
+						System.out.println("ERROR! Unexpected error has occured, Plot with id "+selection+" was not found, please try again!");
 						continue;
 					}
 
