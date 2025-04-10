@@ -1,3 +1,5 @@
+package main;
+
 import menu.CLIMenu;
 
 public class Main {
