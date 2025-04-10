@@ -64,9 +64,9 @@ public class FarmManager {
         }
         
         if(plotsWithAlerts.isEmpty()) {
-            System.out.println("Good New! No new alerts!");
+            System.out.println("Good News! No new alerts!");
         }else {
-            System.out.println("Bad New! There are "+plotsWithAlerts.size()+" alerts!");
+            System.out.println("Bad News! There are "+plotsWithAlerts.size()+" alerts!");
             for(Plot plot : plotsWithAlerts) {
                 System.out.println("Plot " + plot.getId() + " has alerts.");
                 plot.updatePunishment();
