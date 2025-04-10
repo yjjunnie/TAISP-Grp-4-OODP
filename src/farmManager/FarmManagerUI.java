@@ -309,7 +309,10 @@ public class FarmManagerUI {
         		
         		System.out.print("> ");
         		userInput = io.nextInt();
-        		
+        		if(userInput < 1) {
+        			System.out.println("ERROR! Invalid input, must be weeks by be more than 0, please try again!");
+        			continue;
+        		}
         		fastForward(userInput);
         		farmManager.triggerRandomize();
 				isComplete = true;
