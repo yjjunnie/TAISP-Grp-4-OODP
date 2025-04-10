@@ -67,8 +67,8 @@ public class CropReader {
                 try {
                     String name = dataLine.get(0);
                     String Type = dataLine.get(1);
-                    int seedlingWeeks = Integer.parseInt(dataLine.get(2)) / 7;
-                    int matureWeeks = Integer.parseInt(dataLine.get(3)) / 7;
+                    int seedlingWeeks = Integer.parseInt(dataLine.get(2));
+                    int matureWeeks = Integer.parseInt(dataLine.get(3));
 
                     Integer[] temperature = {Integer.parseInt(dataLine.get(4)), Integer.parseInt(dataLine.get(5))};
                     Integer[] humidity = {Integer.parseInt(dataLine.get(6)), Integer.parseInt(dataLine.get(7))};
