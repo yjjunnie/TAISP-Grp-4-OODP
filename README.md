@@ -2,16 +2,6 @@
 
 Cropject-Oriented Farming is an object-oriented simulation system designed to support urban farming in Singapore. The system helps small-scale farmers monitor crop health, manage environmental conditions, and efficiently organize plot usage through a modular and extensible design.
 
-## Team Members
-
-| Name                     | Matriculation Number |
-|--------------------------|----------------------|
-| Atharshlakshmi Vijayakumar | U2421029D          |
-| Holly Zhang Tian Ru       | U2421462C          |
-| Alex Siek Min Ping        | U2421988G          |
-| Sherman Chan              | U2423013C          |
-| Yong Tze Fon Timothy      | U2421340F          |
-
 ## Key Features
 
 - Create and manage land or aquatic farm plots
