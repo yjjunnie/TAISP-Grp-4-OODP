@@ -30,7 +30,7 @@ Cropject-Oriented Farming is an object-oriented simulation system designed to su
 
 ## Setup Instructions  
 
-git clone https://github.com/yjjunnie/TAISP-Grp-4-OODP.git
+1. git clone https://github.com/yjjunnie/TAISP-Grp-4-OODP.git  
 2. Open IntelliJ → File > New > Project from Existing Sources  
 3. Select the root folder and import the project  
 4. Mark `src/` as the source root  
